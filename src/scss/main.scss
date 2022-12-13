@@ -1,0 +1,13 @@
+@import "mixins";
+@import "fonts";
+@import "vendor";
+@import "vars";
+@import "settings";
+
+@import "media";
+
+
+body{
+    background-color: tomato !important;
+    background-image: url(../img/1.jpg);
+}
