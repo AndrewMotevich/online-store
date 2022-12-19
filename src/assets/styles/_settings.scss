@@ -1,0 +1,59 @@
+html {
+    box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+body {
+    overflow-anchor: none;
+    overflow-x: hidden;
+    font-family: "Noto-Sans", sans-serif;
+    scroll-behavior: smooth;
+}
+
+img {
+    max-width: 100%;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.visually-hidden {
+    position: absolute !important;
+    clip: rect(1px 1px 1px 1px);
+    clip: rect(1px, 1px, 1px, 1px);
+    padding: 0 !important;
+    border: 0 !important;
+    height: 1px !important;
+    width: 1px !important;
+    overflow: hidden;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    margin: 0 auto;
+    padding: 0 30px;
+    max-width: 1480px;
+}
+
+button:focus {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+}
+
+
+a:focus {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+}
