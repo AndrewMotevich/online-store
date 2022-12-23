@@ -30,13 +30,13 @@ module.exports = {
       },
 
       // loader for fonts
-      // {
-      //   test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-      //   type: "asset/resource",
-      //   generator: {
-      //     filename: 'assets/fonts/[name].[ext]'
-      //   }
-      // },
+      {
+        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+        type: "asset/resource",
+        generator: {
+          filename: 'assets/fonts/[name].[ext]'
+        }
+      },
 
       // scss loader
       {
