@@ -1,5 +1,6 @@
 .header{
     background-color: var(--color-dark);
+    padding: 13px 0px;
     &__wrap{
         display: flex;
         justify-content: space-between;
@@ -36,6 +37,7 @@
         display: flex;
         align-items: center;
         gap: 35px;
+        margin-right: 21px;
     }
     &__basket{
         position: relative;
