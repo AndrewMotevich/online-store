@@ -1,5 +1,4 @@
-import {log} from "./components/test";
 import "./style.scss";
-import "./assets/img/github-logo.png";
-import "./assets/img/rss-logo.svg";
-log();
+import "./assets/img/logo.png";
+import "./assets/img/basket.png";
+import "./assets/img/gold.png";
