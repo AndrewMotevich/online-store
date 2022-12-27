@@ -1,0 +1,29 @@
+.footer{
+    background-color: var(--color-dark);
+    padding: 15px 0px;
+    &__wrap{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    &__info{
+        display: flex;
+        flex-wrap: wrap;
+        row-gap: 10px;
+        column-gap: 20px;
+        font-family: 'Reaver', serif;
+        &-author{
+            color: var(--color-white);
+            font-weight: 600;
+            font-size: 20px;
+            line-height: 29px;
+        }
+        &-year{
+            width: 100%;
+            color: var(--color-white);
+            font-weight: 600;
+            font-size: 20px;
+            line-height: 29px;
+        }
+    }
+}
