@@ -13,6 +13,12 @@ body {
     overflow-x: hidden;
     font-family: "Noto-Sans", sans-serif;
     scroll-behavior: smooth;
+    background-color: var(--bg-main);
+}
+
+main {
+    padding: 35px 0px 50px 0px;
+    min-height: calc(100vh - 193.5px);
 }
 
 img {
@@ -47,13 +53,17 @@ ul {
     max-width: 1480px;
 }
 
-button:focus {
+button:focus-visible {
     outline: 3px solid var(--color-focus);
     outline-offset: 2px;
 }
 
 
-a:focus {
+a:focus-visible {
     outline: 3px solid var(--color-focus);
     outline-offset: 2px;
+}
+
+.mythical{
+    color: var(--color-mythical)
 }
