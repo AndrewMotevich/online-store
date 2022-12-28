@@ -1,5 +1,6 @@
 .basket{
     background-color: var(--bg-main);
+    padding: 35px 0px 50px 0px;
     &__wrap{
         display: grid;
         grid-template-columns: 3fr 1fr;
