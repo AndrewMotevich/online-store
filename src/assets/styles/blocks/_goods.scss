@@ -93,6 +93,12 @@
                         display: block;
                     }
                 }
+                &:focus-visible{
+                    & ~ .goods-filter-checkbox__checkmark{
+                        outline: 3px solid var(--color-focus);
+                        outline-offset: 2px;
+                    }
+                }
             }
             &__checkmark{
                 height: 14px;
