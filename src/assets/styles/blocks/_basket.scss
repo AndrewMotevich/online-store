@@ -53,6 +53,21 @@
             display: flex;
             align-items: center;
             gap: 14px;
+            &-btn{
+                background-color: transparent;
+                border: none;
+                padding: 0px;
+                cursor: pointer;
+                &-icon{
+                    fill: var(--color-white);
+                    transition: fill 0.3s ease-in-out;
+                }
+                &:hover{
+                    & .basket-items__slider-btn-icon{
+                        fill: var(--color-accent);
+                    }
+                }
+            }
         }
         &__list{
             margin: 0px;
@@ -152,18 +167,38 @@
             &-btn{
                 background-color: transparent;
                 border: none;
-                color: var(--color-secondary);
                 cursor: pointer;
-                transition: color 0.3s ease-in-out;
+                padding: 0px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                &-icon{
+                    fill: var(--color-secondary);
+                    transition: fill 0.3s ease-in-out;
+                }
                 &:hover{
-                    color: var(--color-white);
+                    & .basket-items__item-btn-icon{
+                        fill: var(--color-white);
+                    }
                 }
             }
             &-delete{
-                width: 30px;
-                height: 30px;
+                background-color: transparent;
                 border: none;
                 cursor: pointer;
+                padding: 0px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                &-icon{
+                    fill: var(--color-secondary);
+                    transition: fill 0.3s ease-in-out;
+                }
+                &:hover{
+                    & .basket-items__item-delete-icon{
+                        fill: var(--color-warning);
+                    }
+                }
             }
         }
     }
