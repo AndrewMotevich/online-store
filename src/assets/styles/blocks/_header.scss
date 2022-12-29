@@ -1,6 +1,7 @@
 .header{
     background-color: var(--color-dark);
-    padding: 13px 0px;
+    padding: 12px 0px;
+    border-bottom: 2px solid var(--color-secondary);
     &__wrap{
         display: flex;
         justify-content: space-between;
