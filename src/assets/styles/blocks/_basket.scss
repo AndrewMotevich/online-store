@@ -124,6 +124,20 @@
                 &-info{
                     align-self: flex-end;
                 }
+                &-hero{
+                    align-self: flex-end;
+                    position: relative;
+                    z-index: 1;
+                    width: 100%;
+                    padding: 0px 10px;
+                    background-color: var(--color-dark);
+                    &-name{
+                        font-size: 11px;
+                    }
+                    &-rareness{
+                        font-size: 11px;
+                    }
+                }
             }
             &-name{
                 grid-column: 2;

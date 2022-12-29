@@ -27,8 +27,13 @@ const basketLayout = `
           <li class="basket-items__item">
             <div class="basket-items__item-card">
               <img class="basket-items__item-card-img" src="https://s3-alpha-sig.figma.com/img/3a12/c8cf/8c3f545a52ba44e9a96556effbcab236?Expires=1673222400&Signature=IDmTnxfmZhvsVCuycw-JcEUWUy8gi9XtPAQpQ4ZNS3kT09Qo1UDlbe4iENBtG-dX1Di1bpQwNdEwWB4FFy5HX1zlxHfquNucOHADJeUTaNQdPueFxscH6hpF8dyHFnIGW0ttVpn8rwGDmKIx3bPiO~Jf-NZWWgTrN4qJ2HbIsKrQYtzLG8N8I2xrylhvgDcdho7Rv0ERykCQtKXR4GHbmr6KnFj-YBjWRsJOtb~dDL86kwRdcz3ZDiA5oRp89mmzItIOaD893P7E0iSLVzIYwd36v3JDoPgjMi2nWmSOrGDMkSktMDDIjDDx9M1uinId3vlmZoLSYyYHftdEB7--OQ__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4" alt="">
-              <!-- TODO: take from goods branch -->
-              <div class="basket-items__item-card-info" style="width: 100%;height: 32px;background-color: #000;align-self: end;"></div>
+              <div class="basket-items__item-card-hero hero">
+                <img
+                  src="https://s3-alpha-sig.figma.com/img/e2c1/7f50/bb040d2c866e3bc6b7c2958854abdc43?Expires=1673222400&Signature=fyaWCoo0grTmQyPbIyk~f3UWoYJ7kibcwrYPkIrRrVi4tu1k2xczyiL8uaCvnxmwcUt7s69-zWphqdEEG2sdFgvqg60KISNJz3tS-6X4uzZorXAbbjcrnYJ1zS5pjZ3i0kv6bHCc1lIzv0u-TxyKAqlALNAqiHfeErlSPaFlNu83TPBSRFBXCEQiT5WjQLP3YJmEKVmsE4mpNKClDwd-k0vaLw5RcsATKKS2kgF1s6rOmXn1wVESUKT0XyyTW5tuSZSvP60kTjj8bE6Y~jcqPv77DDbUe62xNqToCP4ZAzwagr7A0TgP3gGkQzfNsZ1c55HC30LadIu~-AeqeIAaGA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4"
+                  alt="" class="hero__avatar">
+                <span class="basket-items__item-card-hero-name hero__name">Primal Beast</span>
+                <span class="basket-items__item-card-hero-rareness hero__rareness mythical">Mythical</span>
+              </div>
             </div>
             <h3 class="basket-items__item-name">Dark Behemoth</h3>
             <div class="basket-items__item-bottom">
@@ -72,6 +77,6 @@ const basketLayout = `
         <button class="basket-pay__btn">Купить</button>
       </div>
     </div>
-    </section>
+  </section>
 `;
 export default basketLayout;
