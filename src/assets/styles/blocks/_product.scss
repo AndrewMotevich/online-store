@@ -1,0 +1,191 @@
+/*
+Structure:
+****************************
+.goods-details_wrapper{
+  .goods-details_navigation{}
+  .goods-details_info-field{
+    .info-field_img{}
+    .info-field_description{}
+  }
+}
+****************************
+P.S. Buttons and labels separated
+*/
+%flex-element-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.goods-details_wrapper {
+    width: 1480px;
+    min-height: 670px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    .goods-details_navigation {
+        font-family: 'Reaver', serif;
+        font-size: 20px;
+        font-weight: 600;
+        width: 1480px;
+        height: 73px;
+        background-color: #0d0e13;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        border-radius: 10px;
+        li {
+            display: inline;
+        }
+        .navigation_title {
+            color: #a8c445;
+            padding-left: 40px;
+        }
+        .navigation_path {
+            color: #5d6798;
+        }
+        .navigation_active {
+            color: #ffffff;
+        }
+    }
+    .goods-details_info-field {
+        width: 1480px;
+        height: 465px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        color: #ffffff;
+        font-family: 'Noto-Sans', sans-serif;
+        background-color: #0d0e13;
+        border-radius: 10px;
+        h2 {
+            margin: 0;
+            width: 247px;
+            height: 44px;
+            font-size: 32px;
+            font-weight: 600;
+        }
+        h3 {
+            margin: 0;
+            height: 25px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .info-field_img {
+            width: 600px;
+            height: 400px;
+            img {
+                width: 100%;
+                border-radius: 10px;
+            }
+            .arrows {
+                position: relative;
+                bottom: 60px;
+                display: flex;
+                width: 600px;
+                justify-content: space-between;
+            }
+            .arrow-left {
+                @extend %flex-element-center;
+                margin: 0;
+                width: 50px;
+                height: 50px;
+                font-size: 30px;
+                color: #a8c445;
+                background-color: rgb(21, 21, 21, 0.3);
+                border-radius: 50%;
+                cursor: pointer;
+              }
+              .arrow-right {
+                @extend %flex-element-center;
+                margin: 0;
+                width: 50px;
+                height: 50px;
+                font-size: 30px;
+                color: #a8c445;
+                background-color: rgb(21, 21, 21, 0.5);
+                border-radius: 50%;
+                cursor: pointer;
+            }
+        }
+        .info-field_description {
+            width: 750px;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+    }
+}
+//Buttons and labels
+.goods-details_wrapper {
+    .description_labels {
+        .label {
+            width: 127px;
+            height: 39px;
+        }
+        font-size: 12px;
+        display: flex;
+        width: 592px;
+        height: 39px;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .label {
+        @extend %flex-element-center;
+        background-color: #171a26;
+        border-radius: 5px;
+    }
+    .description_button {
+        width: 175px;
+        height: 45px;
+        background-color: #a8c445;
+        font-size: 16px;
+        align-self: flex-end;
+        border-radius: 10px;
+        color: #ffffff;
+    }
+    .label_rarity {
+        display: flex;
+        justify-content: space-around;
+        border: 1px solid #8847ff;
+        color: #8847ff;
+        font-size: 12px;
+    }
+    .label_hero {
+        width: 127px;
+        height: 39px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        img {
+            border-radius: 50%;
+        }
+    }
+    .label_stock {
+        span {
+            color: red;
+        }
+    }
+    .label_price {
+        width: 177px;
+        height: 54px;
+        font-size: 24px;
+        color: #a8c445;
+    }
+    .description_modal-button {
+        width: 221px;
+        height: 47px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    .description_text {
+        font-size: 16px;
+    }
+    .line {
+        height: 5px;
+        background-color: #a8c445;
+        border-radius: 10px;
+    }
+}
