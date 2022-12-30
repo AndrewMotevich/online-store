@@ -5,4 +5,4 @@ const errorPageLayout = `
     </h2>
 </section>
 `;
-export default errorPageLayout;
+export {errorPageLayout};
