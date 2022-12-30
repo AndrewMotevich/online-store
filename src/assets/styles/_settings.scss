@@ -11,13 +11,16 @@ html {
 body {
     overflow-anchor: none;
     overflow-x: hidden;
-    font-family: "Noto-Sans", sans-serif;
+    font-family: 'Noto-Sans', sans-serif;
     scroll-behavior: smooth;
     background-color: var(--bg-main);
 }
 
 main {
     min-height: calc(100vh - 193.5px);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
 }
 
 img {
@@ -57,12 +60,16 @@ button:focus-visible {
     outline-offset: 2px;
 }
 
-
 a:focus-visible {
     outline: 3px solid var(--color-focus);
     outline-offset: 2px;
 }
 
+
+.mythical {
+    color: var(--color-mythical);
+}
+=======
 .common{
     color: var(--color-common);
 }
