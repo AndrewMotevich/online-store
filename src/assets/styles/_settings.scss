@@ -63,6 +63,86 @@ a:focus-visible {
     outline-offset: 2px;
 }
 
+.common{
+    color: var(--color-common);
+}
+
+.uncommon{
+    color: var(--color-uncommon);
+}
+
 .mythical{
     color: var(--color-mythical)
+}
+
+.rare{
+    color: var(--color-rare);
+}
+
+.immortal{
+    color: var(--color-immortal);
+}
+
+.legendary{
+    color: var(--color-legendary);
+}
+
+.arcana{
+    color: var(--color-arcana);
+}
+
+.common-bg{
+    background-color: var(--color-common);
+}
+
+.uncommon-bg{
+    background-color: var(--color-uncommon);
+}
+
+.mythical-bg{
+    background-color: var(--color-mythical)
+}
+
+.rare-bg{
+    background-color: var(--color-rare);
+}
+
+.immortal-bg{
+    background-color: var(--color-immortal);
+}
+
+.legendary-bg{
+    background-color: var(--color-legendary);
+}
+
+.arcana-bg{
+    background-color: var(--color-arcana);
+}
+
+.common-border{
+    border: 1px solid var(--color-common);
+}
+
+.uncommon-border{
+    border: 1px solid var(--color-uncommon);
+}
+
+.mythical-border{
+    border: 1px solid var(--color-mythical)
+}
+
+.rare-border{
+    border: 1px solid var(--color-rare);
+}
+
+.immortal-border{
+    border: 1px solid var(--color-immortal);
+}
+
+.legendary-border{
+    border: 1px solid var(--color-legendary);
+}
+
+.arcana-border{
+    border: 1px solid var(--color-arcana);
 }
