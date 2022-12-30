@@ -298,4 +298,4 @@ const cardsTemplates = `
   </div>
 </div>
 `;
-export default cardsTemplates;
+export {cardsTemplates};
