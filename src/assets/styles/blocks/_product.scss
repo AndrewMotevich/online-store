@@ -1,0 +1,217 @@
+/*
+Structure:
+****************************
+.goods-details_wrapper{
+  .goods-details_navigation{}
+  .goods-details_info-field{
+    .info-field_img{}
+    .info-field_description{}
+  }
+}
+****************************
+P.S. Buttons and labels separated
+*/
+%flex-element-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.goods-details_wrapper {
+    padding: 35px 0px 50px 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    .goods-details_navigation {
+        font-family: 'Reaver', serif;
+        font-size: 20px;
+        font-weight: 600;
+        background-color: var(--color-dark);
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        border-radius: 10px;
+        padding: 22px 40px;
+        ul {
+            display: flex;
+            gap: 5px;
+        }
+        li {
+            display: inline;
+            &:not(:first-child):before{
+                content: "\/";
+                padding-right: 5px;
+            }
+            color: var(--color-secondary);
+            &:first-child{
+                color: var(--color-accent);
+            }
+            &:last-child{
+                color: var(--color-white);
+            }
+        }
+    }
+    .goods-details_info-field {
+        padding: 30px 40px;
+        display: grid;
+        grid-template-columns: minmax(300px, max-content) 1fr;
+        align-items: start;
+        gap: 50px;
+        color: var(--color-white);
+        background-color: var(--color-dark);
+        border-radius: 10px;
+        h3 {
+            margin: 0;
+            font-size: 32px;
+            font-weight: 600;
+        }
+        h4 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .info-field_img {
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            img{
+                vertical-align: bottom;
+            }
+            .arrows {
+                position: absolute;
+                bottom: 20px;
+                display: flex;
+                width: 100%;
+                justify-content: space-between;
+                padding: 0px 20px;
+            }
+            .arrow-left {
+                @extend %flex-element-center;
+                margin: 0;
+                width: 50px;
+                height: 50px;
+                font-size: 30px;
+                color: var(--color-accent);
+                background-color: rgb(21, 21, 21, 0.3);
+                border-radius: 50%;
+                cursor: pointer;
+                padding: 0px;
+                border: none;
+              }
+              .arrow-right {
+                @extend %flex-element-center;
+                margin: 0;
+                width: 50px;
+                height: 50px;
+                font-size: 30px;
+                color: var(--color-accent);
+                background-color: rgb(21, 21, 21, 0.5);
+                border-radius: 50%;
+                cursor: pointer;
+                padding: 0px;
+                border: none
+            }
+        }
+        .info-field_description {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+    }
+}
+//Buttons and labels
+.goods-details_wrapper {
+    .description_labels {
+        .label {
+            min-width: 127px;
+            min-height: 39px;
+            padding: 0px 5px;
+            margin: 0;
+        }
+        font-size: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 25px
+    }
+    .label {
+        @extend %flex-element-center;
+        background-color: var(--bg-secondary);
+        border-radius: 5px;
+    }
+    .description_button {
+        background-color: var(--color-accent);
+        font-size: 16px;
+        align-self: flex-end;
+        border-radius: 10px;
+        color: var(--color-white);
+        padding: 12px 44px;
+        border: 1px solid var(--color-accent);
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+        &:hover{
+            background-color: transparent;
+            color: var(--color-accent);
+        }
+    }
+    .label_rarity {
+        display: flex;
+        gap: 12px;
+        font-size: 12px;
+        &-icon{
+            width: 21px;
+            height: 21px;
+            border-radius: 50%;
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            &-dot{
+                width: 11px;
+                height: 11px;
+                border-radius: 50%;
+            }
+        }
+    }
+    .label_hero {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        img {
+            border-radius: 50%;
+        }
+    }
+    .label_stock {
+        span {
+            color: var(--color-warning);
+        }
+    }
+    .label_price {
+        font-size: 24px;
+        color: var(--color-accent);
+        padding: 10px 30px;
+        text-align: center;
+    }
+    .description_modal-button {
+        padding: 13px 30px;
+        border: none;
+        color: var(--color-white);
+        font-size: 16px;
+        cursor: pointer;
+        transition: color 0.3s ease-in-out;
+        &:hover{
+            color: var(--color-accent)
+        }
+    }
+    .description_text {
+        font-size: 16px;
+        margin: 0px;
+    }
+    .line {
+        height: 5px;
+        background-color: var(--color-accent);
+        border-radius: 10px;
+        width: 100%;
+    }
+}
