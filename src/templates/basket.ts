@@ -79,4 +79,4 @@ const basketLayout = `
     </div>
   </section>
 `;
-export default basketLayout;
+export {basketLayout};
