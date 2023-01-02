@@ -1,0 +1,118 @@
+/*
+Structure:
+********************
+.modal_window {
+  modal-window_forms{
+    .modal-window_form{
+    }
+    .modal-window_img {
+    }
+  }
+}
+********************
+*/
+//!!!CHECK THIS!!!!
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+%flex-position-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.modal-window {
+    background-color: #0D0E14;
+    align-self: center;
+    display: flex;
+    justify-content: space-between;
+    width: 1032px;
+    height: 874px;
+    font-family: 'Noto-Sans', sans-serif;
+    color: #ffffff;
+
+    .modal-window_forms {
+        display: flex;
+        width: 490px;
+        height: 740px;
+        flex-direction: column;
+        justify-content: space-between;
+        padding-left: 46px;
+        padding-top: 25px;
+        .modal-window_title {
+            margin: 0;
+            font-weight: 600;
+            font-size: 34px;
+        }
+
+        .modal-window_personal-data-form {
+            height: 320px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-self: flex-start;
+            font-size: 20px;
+            color: #ffffff;
+            input {
+                width: 370px;
+                height: 55px;
+                background-color: #1f2233;
+                border: 1px solid #a1a8ce;
+                border-radius: 10px;
+                padding-left: 10px
+            }
+        }
+        .modal-window_card-data-form {
+            width: 490px;
+            height: 249px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            font-size: 20px;
+            color: #ffffff;
+            .card_date {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                width: 490px;
+                height: 55px;
+                background-color: #1f2233;
+                border: 1px solid #a1a8ce;
+                border-radius: 10px;
+                input {
+                    text-align: center;
+                    width: 50px;
+                    height: 40px;
+                    background-color: #1f2233;
+                    border: none;
+                }
+            }
+            input {
+                width: 490px;
+                height: 55px;
+                background-color: #1f2233;
+                border: 1px solid #a1a8ce;
+                border-radius: 10px;
+                padding-left: 10px
+            }
+        }
+        .button {
+            @extend %flex-position-center;
+            width: 300px;
+            height: 66px;
+            background-color: #a8c445;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 20px;
+            border-radius: 10px;
+        }
+    }
+    .modal-window_img {
+        align-self: flex-end;
+        width: 496px;
+        height: 782px;
+    }
+}
