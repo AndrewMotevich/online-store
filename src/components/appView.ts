@@ -34,7 +34,7 @@ class Cards {
         });
         this.cardsDOM.innerHTML = result;
         const findDOM = document.querySelector('.goods-cards__head-find-num') as HTMLElement;
-        findDOM.textContent = `${this.mainPage.getCards().length}`;
+        findDOM.textContent = `${this.mainPage.filterTest().length}`;
     }
 }
 

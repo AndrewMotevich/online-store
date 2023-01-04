@@ -15,11 +15,12 @@ type ICard = {
 };
 type QueryParams = {
     "price-range": Array<number>;
+    "stock-range": Array<number>;
+    sort: Array<string>;
     category: Array<string>;
     type: Array<string>;
     hero: Array<string>;
     rarity: Array<string>;
-    "stock-range": Array<number>;
     search: Array<string>;
 };
 export { ICard, QueryParams };
