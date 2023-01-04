@@ -12,6 +12,7 @@ class QString {
             rarity: [],
             "stock-range": [],
             search: [],
+            sort: [],
         };
         this.isQuery = false;
     }
@@ -53,6 +54,7 @@ class QString {
             rarity: [],
             "stock-range": [],
             search: [],
+            sort: [],
         };
         history.pushState(null, '', window.location.pathname);
         this.isQuery = false;

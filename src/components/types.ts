@@ -14,13 +14,13 @@ type ICard = {
     'video-link': string;
 };
 type QueryParams = {
-    "price-range": Array<number>;
-    "stock-range": Array<number>;
-    sort: Array<string>;
-    category: Array<string>;
-    type: Array<string>;
-    hero: Array<string>;
-    rarity: Array<string>;
-    search: Array<string>;
+    "price-range": Array<number> | Array<string>;
+    "stock-range": Array<number> | Array<string>;
+    sort: Array<string> | Array<string>;
+    category: Array<string> | Array<string>;
+    type: Array<string> | Array<string>;
+    hero: Array<string> | Array<string>;
+    rarity: Array<string> | Array<string>;
+    search: Array<string> | Array<string>;
 };
 export { ICard, QueryParams };
