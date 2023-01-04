@@ -50,7 +50,7 @@ const cardsTemplates = `
             <li class="goods-filter__subitem">
               <div class="goods-filter-checkbox">
                 <label class="goods-filter-checkbox__label">Набор
-                  <input type="checkbox"  class="goods-filter-checkbox__input">
+                  <input type="checkbox" name="type" value="bundle" class="goods-filter-checkbox__input">
                   <span class="goods-filter-checkbox__checkmark"></span>
                 </label>
               </div>
@@ -58,7 +58,7 @@ const cardsTemplates = `
             <li class="goods-filter__subitem">
               <div class="goods-filter-checkbox">
                 <label class="goods-filter-checkbox__label">Предмет
-                  <input type="checkbox"  class="goods-filter-checkbox__input">
+                  <input type="checkbox" name="type" value="item" class="goods-filter-checkbox__input">
                   <span class="goods-filter-checkbox__checkmark"></span>
                 </label>
               </div>
@@ -74,7 +74,7 @@ const cardsTemplates = `
             <li class="goods-filter__subitem">
               <div class="goods-filter-checkbox">
                 <label class="goods-filter-checkbox__label">Common
-                  <input type="checkbox"  class="goods-filter-checkbox__input">
+                  <input type="checkbox" name="rarity" value="Common" class="goods-filter-checkbox__input">
                   <span class="goods-filter-checkbox__checkmark"></span>
                 </label>
               </div>
@@ -82,7 +82,7 @@ const cardsTemplates = `
             <li class="goods-filter__subitem">
               <div class="goods-filter-checkbox">
                 <label class="goods-filter-checkbox__label">Uncommon
-                  <input type="checkbox"  class="goods-filter-checkbox__input">
+                  <input type="checkbox" name="rarity" value="Uncommon" class="goods-filter-checkbox__input">
                   <span class="goods-filter-checkbox__checkmark"></span>
                 </label>
               </div>
@@ -90,7 +90,7 @@ const cardsTemplates = `
             <li class="goods-filter__subitem">
               <div class="goods-filter-checkbox">
                 <label class="goods-filter-checkbox__label">Mythical
-                  <input type="checkbox"  class="goods-filter-checkbox__input">
+                  <input type="checkbox" name="rarity" value="Mythical" class="goods-filter-checkbox__input">
                   <span class="goods-filter-checkbox__checkmark"></span>
                 </label>
               </div>
@@ -98,7 +98,7 @@ const cardsTemplates = `
             <li class="goods-filter__subitem">
               <div class="goods-filter-checkbox">
                 <label class="goods-filter-checkbox__label">Rare
-                  <input type="checkbox"  class="goods-filter-checkbox__input">
+                  <input type="checkbox" name="rarity" value="Rare" class="goods-filter-checkbox__input">
                   <span class="goods-filter-checkbox__checkmark"></span>
                 </label>
               </div>
@@ -106,7 +106,7 @@ const cardsTemplates = `
             <li class="goods-filter__subitem">
               <div class="goods-filter-checkbox">
                 <label class="goods-filter-checkbox__label">Immortal
-                  <input type="checkbox"  class="goods-filter-checkbox__input">
+                  <input type="checkbox" name="rarity" value="Immortal" class="goods-filter-checkbox__input">
                   <span class="goods-filter-checkbox__checkmark"></span>
                 </label>
               </div>
@@ -114,7 +114,7 @@ const cardsTemplates = `
             <li class="goods-filter__subitem">
               <div class="goods-filter-checkbox">
                 <label class="goods-filter-checkbox__label">Legendary
-                  <input type="checkbox"  class="goods-filter-checkbox__input">
+                  <input type="checkbox" name="rarity" value="Legendary" class="goods-filter-checkbox__input">
                   <span class="goods-filter-checkbox__checkmark"></span>
                 </label>
               </div>
@@ -122,7 +122,7 @@ const cardsTemplates = `
             <li class="goods-filter__subitem">
               <div class="goods-filter-checkbox">
                 <label class="goods-filter-checkbox__label">Arcana
-                  <input type="checkbox"  class="goods-filter-checkbox__input">
+                  <input type="checkbox" name="rarity" value="Arcana" class="goods-filter-checkbox__input">
                   <span class="goods-filter-checkbox__checkmark"></span>
                 </label>
               </div>
