@@ -10,14 +10,14 @@ class MainPage {
         this.controller = new Controller();
         this.data = this.controller.getAllCards();
         this.testQueryParameters = {
-            'price-range': [3000, 9999],
+            'price-range': [],
             'stock-range': [],
-            sort: ["descending"],
+            sort: [],
             category: [],
             type: [],
             hero: [],
             rarity: [],
-            search: ["Lina"],
+            search: [],
         };
     }
 
@@ -56,8 +56,8 @@ class MainPage {
             const min = queryParameters['stock-range'][0];
             allCards.forEach((obj) => {
                 if (
-                    obj.price >= min &&
-                    obj.price <= max
+                    obj.stock >= min &&
+                    obj.stock <= max
                 ) {
                     tempSet.add(obj);
                 }
@@ -111,7 +111,7 @@ class MainPage {
                     }
                 });
             });
-            console.log(tempSet);
+            // console.log(tempSet);
             set.clear();
             tempSet.forEach(element=>set.add(element));
             return 1;
@@ -151,8 +151,8 @@ class MainPage {
             }
         }
         priceFilter();stockFilter();typeFilter();rarityFilter();includeSearchParameter();pushSetToResult();sortCards();
-        console.log(priceFilter(),stockFilter(),typeFilter(),rarityFilter(),includeSearchParameter(),pushSetToResult(),sortCards(),);
-        console.log(result);
+        // console.log(priceFilter(),stockFilter(),typeFilter(),rarityFilter(),includeSearchParameter(),pushSetToResult(),sortCards(),);
+        // console.log(result);
         return result;
     }
 }
