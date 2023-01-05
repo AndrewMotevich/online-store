@@ -1,4 +1,4 @@
-const productInfo = `<div class="goods-details_wrapper container">
+const productTemplate = `<div class="goods-details_wrapper container">
 <nav class="goods-details_navigation">
   <ul>
     <li class="navigation_path">
@@ -52,4 +52,4 @@ const productInfo = `<div class="goods-details_wrapper container">
   </div>
 </section>
 </div>`;
-export {productInfo};
+export {productTemplate};

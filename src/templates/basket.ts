@@ -1,4 +1,4 @@
-const basketLayout = `
+const basketTemplate = `
 <section class="basket">
     <div class="basket__wrap container">
       <div class="basket-items">
@@ -79,4 +79,4 @@ const basketLayout = `
     </div>
   </section>
 `;
-export {basketLayout};
+export {basketTemplate};
