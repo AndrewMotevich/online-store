@@ -1,6 +1,6 @@
 import MainPage from "./mainPage";
-import { cardsTemplates } from "../templates/cards";
-import { productInfo } from "../templates/product-info";
+import router from "./router";
+import { QString } from "./qString";
 
 class Cards {
     mainPage;
@@ -39,33 +39,43 @@ class Cards {
 }
 
 class AppView {
-    title;
-    location;
-    appDOM;
-    constructor (title: string, location: string, appDOM: HTMLElement) {
-        this.title = title;
-        this.location = location;
-        this.appDOM = appDOM;
+    qString;
+    constructor() {
+        this.qString = new QString;
     }
 
     init() {
-        history.pushState({}, this.title, this.location);
-
-        switch (this.location) {
-            case '/':
-                document.title = this.title;
-                this.appDOM.innerHTML = cardsTemplates;
-                new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
-            break;
-            case '/product-details':
-                this.appDOM.innerHTML = productInfo;
-            break;
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            router.navigate(localStorage.getItem('lastPath') ?? 'home', 'Secret Shop - Главная');
+            router.init();
+        });
+        
+        window.addEventListener('popstate', () => {
+            router.init();
+        });
+        
+        document.querySelector('.header__logo')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            router.navigate(`home${this.qString.getQueryString()}`, 'Secret Shop - Главная');
+        });
+        
+        document.querySelector('.header__basket')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            router.navigate('basket', 'Secret Shop - Корзина');
+        });
+        
+        router.options.appDOM.addEventListener('click', (e) => {
+            const target = e.target as HTMLElement;
+            if (target.closest('.card__buy')) {
+                return false;
+            }
+            if (target.closest('.goods-cards__item')) {
+                e.preventDefault();
+                router.navigate(`products/${target.dataset.id}`, `Secret Shop - Товар`);
+            }
+        });
     }
 }
 
-// example:
-// const app = new AppView('Secret Shop - Product', '/product', document.querySelector('.main') as HTMLElement).init();
-// const app = new AppView('Secret Shop', '/', document.querySelector('.main') as HTMLElement).init();
 
 export {AppView, Cards};

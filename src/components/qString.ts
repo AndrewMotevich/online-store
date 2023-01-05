@@ -16,7 +16,7 @@ class QString {
         };
         this.isQuery = false;
     }
-    getQueryString() {
+    getQueryObject() {
         const qStr = `${window.location}`.split('?')[1];
         const data = qStr.split('&');
 
@@ -32,6 +32,11 @@ class QString {
             console.log(key, value);
         });
         return this.result;
+    }
+
+    getQueryString() {
+        const qStr = `${window.location}`.split('?')[1];
+        return qStr ? `?${qStr}` : '';
     }
 
     setQueryParams(key: string, value: string) {
