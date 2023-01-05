@@ -71,7 +71,7 @@ class Router {
             return false;
         });
         
-        if (!this.routes.map((x) => x.path).map((y) => this.current?.replace(y, '')).some((path) => path === '')) {
+        if (!this.routes.map((x) => x.path).map((y) => this.current?.split('?')[0].replace(y, '')).some((path) => path === '')) {
             this.options.appDOM.innerHTML = this.options[404];
             return;
         }
