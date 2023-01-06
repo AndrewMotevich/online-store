@@ -21,4 +21,4 @@ const modalWindowTemplate = `    <div class="modal-window">
 </div>
 <img class="modal-window_img" src="../src/assets/img/sven.png" alt="sven">
 </div>`;
-export default modalWindowTemplate;
+export {modalWindowTemplate};

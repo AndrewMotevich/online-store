@@ -3,15 +3,6 @@ import "./assets/img/error-bg.jpg";
 import "./assets/img/logo.png";
 import "./assets/img/basket.png";
 import "./assets/img/gold.png";
-// import { AppView } from "./components/appView";
-// const app = new AppView('Secret Shop', '/', document.querySelector('.main') as HTMLElement);
-// app.init();
-// import { Router } from "./components/router";
-
-// const router = new Router();
-// router.get('/about-me', function(req){
-//     console.log(req.path);
-// });
-// router.init();
-import router from "./components/router";
-console.log(router);
+import { AppView } from "./components/appView";
+const app = new AppView();
+app.init();

@@ -1,4 +1,4 @@
-const cardsTemplates = `
+const cardsTemplate = `
 <div class="goods">
   <div class="goods__wrap container">
     <aside class="goods-filter">
@@ -298,4 +298,4 @@ const cardsTemplates = `
   </div>
 </div>
 `;
-export {cardsTemplates};
+export {cardsTemplate};
