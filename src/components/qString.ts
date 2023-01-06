@@ -2,7 +2,6 @@ import { QueryParams } from "./types";
 
 class QString {
     result: QueryParams;
-    isQuery;
     constructor() {
         this.result = {
             "price-range": [],
@@ -14,9 +13,10 @@ class QString {
             search: [],
             sort: [],
         };
-        this.isQuery = false;
     }
+
     getQueryObject() {
+        
         const qStr = `${window.location}`.split('?')[1];
         const data = qStr.split('&');
 
@@ -29,7 +29,6 @@ class QString {
             } else {
                 this.result[key as keyof QueryParams] = value.split('%2C+');
             }
-            console.log(key, value);
         });
         return this.result;
     }
@@ -40,14 +39,44 @@ class QString {
     }
 
     setQueryParams(key: string, value: string) {
-        this.isQuery = true;
         const searchParams = new URLSearchParams(window.location.search);
         if (searchParams.has(key)) {
             value = `${searchParams.get(key)}, ${value}`;
-        }
+        } 
         searchParams.set(key, value);
-        const newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
+        const newRelativePathQuery = `${window.location.pathname}?${searchParams}`;
         history.pushState(null, '', newRelativePathQuery);
+        
+        localStorage.setItem('lastPath', `home${window.location.search}`);
+    }
+
+    delQueryParams(key: string, value: string) {
+        const searchParams = new URLSearchParams(window.location.search);
+        const queryValues = Array.from(searchParams.entries()).filter((arr) => arr[0] === key)[0].slice(1)[0].split(', ');
+
+        if (queryValues.length === 1) {
+            searchParams.delete(key);
+            history.pushState(null, '', `${window.location.pathname}?${searchParams.toString()}`);
+            localStorage.setItem('lastPath', `home${window.location.search}`);
+            return;
+        }
+
+        const newParams = queryValues.filter((val) => val !== value).join(', ');
+        searchParams.set(key, newParams);
+        const newRelativePathQuery = `${window.location.pathname}?${searchParams}`;
+        history.pushState(null, '', newRelativePathQuery);
+        localStorage.setItem('lastPath', `home${window.location.search}`);
+    }
+
+    delQueryKey(key: string) {
+        const searchParams = new URLSearchParams(window.location.search);
+        searchParams.delete(key);
+        history.pushState(null, '', `${window.location.pathname}?${searchParams.toString()}`);
+        localStorage.setItem('lastPath', `home${window.location.search}`);
+    }
+
+    resetQueryString() {
+        history.pushState(null, '', window.location.pathname);
     }
 
     resetQuery() {
@@ -62,7 +91,11 @@ class QString {
             sort: [],
         };
         history.pushState(null, '', window.location.pathname);
-        this.isQuery = false;
+        localStorage.setItem('lastPath', `home${window.location.search}`);
+    }
+
+    hasQuery() {
+        return !!`${window.location}`.split('?')[1];
     }
 }
 

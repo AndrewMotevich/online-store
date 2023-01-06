@@ -1,24 +1,19 @@
 import { Controller } from './controller';
 import { ICard, QueryParams } from './types';
 
+import { QString } from './qString';
+
 class MainPage {
     data: ICard[];
     controller;
     testQueryParameters: QueryParams;
+    qString: QString;
 
     constructor() {
         this.controller = new Controller();
         this.data = this.controller.getAllCards();
-        this.testQueryParameters = {
-            'price-range': [],
-            'stock-range': [],
-            sort: [],
-            category: [],
-            type: [],
-            hero: [],
-            rarity: [],
-            search: [],
-        };
+        this.qString = new QString();
+        this.testQueryParameters = this.qString.hasQuery() ? this.qString.getQueryObject() : this.qString.result;
     }
 
     getCards() {
@@ -26,6 +21,10 @@ class MainPage {
     }
 
     filterTest() {
+        if (!this.qString.hasQuery()) {
+            return this.data;
+        }
+
         const queryParameters = this.testQueryParameters;
         const allCards = this.data;
         const set = new Set();
@@ -82,6 +81,22 @@ class MainPage {
             tempSet.forEach(element=>set.add(element));
             return 1;
         }
+        function categoryFilter(){
+            const tempSet = new Set();
+            const filterArray: Array<string> = queryParameters.category;
+            if (filterArray.length === 0) return 0;
+            set.forEach((element) => {
+                const elem = element as ICard;
+                for (const key in filterArray){
+                    if (elem.category === filterArray[key].replace(/-/g, ' ')) {
+                        tempSet.add(elem);
+                    }
+                }
+            });
+            set.clear();
+            tempSet.forEach(element=>set.add(element));
+            return 1;
+        }
         function rarityFilter(){
             const tempSet = new Set();
             const filterArray: Array<string> = queryParameters.rarity;
@@ -106,12 +121,11 @@ class MainPage {
                 const elem = element as ICard;
                 const elemValues = Object.values(elem);
                 elemValues.forEach((value) => {
-                    if (value === searchParametr){
+                    if (value === searchParametr.replace(/\+/g, ' ')){
                         tempSet.add(elem);
                     }
                 });
             });
-            // console.log(tempSet);
             set.clear();
             tempSet.forEach(element=>set.add(element));
             return 1;
@@ -126,33 +140,22 @@ class MainPage {
         }
         function sortCards(){
             if (queryParameters.sort.length === 0) return 0;
-            else if (queryParameters.sort[0] === "ascending"){
-                result.sort((a,b)=>{
-                    if (a.price < b.price) {
-                        return -1;
-                      }
-                      if (a.price > b.price) {
-                        return 1;
-                      }
-                      return 0;
-                });
+            else if (queryParameters.sort[0] === "descendingPrice"){
+                result.sort((a, b)=> b.price - a.price);
                 return 1;
             }
-            else if (queryParameters.sort[0] === "descending") {
-                result.sort((a,b)=>{
-                    if (a.price > b.price) {
-                        return -1;
-                      }
-                      if (a.price < b.price) {
-                        return 1;
-                      }
-                      return 0;
-                });
+            else if (queryParameters.sort[0] === "ascendingPrice") {
+                result.sort((a, b)=> a.price - b.price);
+            }
+            else if (queryParameters.sort[0] === "descendingStock"){
+                result.sort((a, b)=> b.stock - a.stock);
+                return 1;
+            }
+            else if (queryParameters.sort[0] === "ascendingStock") {
+                result.sort((a, b)=> a.stock - b.stock);
             }
         }
-        priceFilter();stockFilter();typeFilter();rarityFilter();includeSearchParameter();pushSetToResult();sortCards();
-        // console.log(priceFilter(),stockFilter(),typeFilter(),rarityFilter(),includeSearchParameter(),pushSetToResult(),sortCards(),);
-        // console.log(result);
+        priceFilter();stockFilter();typeFilter();categoryFilter();rarityFilter();includeSearchParameter();pushSetToResult();sortCards();
         return result;
     }
 }

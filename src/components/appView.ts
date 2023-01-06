@@ -11,8 +11,19 @@ class Cards {
     }
 
     render() {
+        if (localStorage.getItem('view-column') === '3') {
+            document.querySelector('.goods-cards__list')?.classList.add('goods-cards__list--3');
+            document.querySelector('.goods-cards__head-type-btn--3')?.classList.add('goods-cards__head-type-btn--active');
+        } else {
+            document.querySelector('.goods-cards__list')?.classList.add('goods-cards__list--4');
+            document.querySelector('.goods-cards__head-type-btn--4')?.classList.add('goods-cards__head-type-btn--active');
+        }
         let result = '';
-        // this.mainPage.getCards().forEach((card) => {
+        if (this.mainPage.filterTest().length === 0) {
+            document.querySelector('.goods-cards__not-found')?.classList.add('goods-cards__not-found--active');
+            return;
+        }
+        document.querySelector('.goods-cards__not-found')?.classList.remove('goods-cards__not-found--active');
         this.mainPage.filterTest().forEach((card) => {
             result += `
             <li class="goods-cards__item card" data-id="${card.id}" style="background: no-repeat center url(${card.img1}) var(--color-dark); background-size: cover">
@@ -41,13 +52,36 @@ class Cards {
 class AppView {
     qString;
     constructor() {
-        this.qString = new QString;
+        this.qString = new QString();
+    }
+
+    filterChecker() {
+        const obj = this.qString.hasQuery() ? this.qString.getQueryObject() : this.qString.result;
+        Object.entries(obj).forEach((item) => {
+            item[1].forEach((value) => {
+                const input = document.querySelector(`input[value="${value}"]`) as HTMLInputElement;
+                input.checked = true;
+            });
+        });
+    }
+
+    typeView() {
+        if (localStorage.getItem('view-column') === '3') {
+            document.querySelector('.goods-cards__list')?.classList.add('goods-cards__list--3');
+            document.querySelector('.goods-cards__head-type-btn--3')?.classList.add('goods-cards__head-type-btn--active');
+        } else {
+            document.querySelector('.goods-cards__list')?.classList.add('goods-cards__list--4');
+            document.querySelector('.goods-cards__head-type-btn--4')?.classList.add('goods-cards__head-type-btn--active');
+        }
     }
 
     init() {
         document.addEventListener('DOMContentLoaded', () => {
-            router.navigate(localStorage.getItem('lastPath') ?? 'home', 'Secret Shop - Главная');
+            this.qString.resetQueryString();
+            router.navigate(`${localStorage.getItem('lastPath') ?? 'home'}`, 'Secret Shop - Главная');
             router.init();
+            this.filterChecker();
+            this.typeView();
         });
         
         window.addEventListener('popstate', () => {
@@ -56,7 +90,11 @@ class AppView {
         
         document.querySelector('.header__logo')?.addEventListener('click', (e) => {
             e.preventDefault();
-            router.navigate(`home${this.qString.getQueryString()}`, 'Secret Shop - Главная');
+            this.qString.resetQueryString();
+            router.navigate('home', 'Secret Shop - Главная');
+            localStorage.setItem('lastPath', 'home');
+            new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
+            this.typeView();
         });
         
         document.querySelector('.header__basket')?.addEventListener('click', (e) => {
@@ -72,6 +110,97 @@ class AppView {
             if (target.closest('.goods-cards__item')) {
                 e.preventDefault();
                 router.navigate(`products/${target.dataset.id}`, `Secret Shop - Товар`);
+            }
+
+            if(target.closest('.goods-filter-input')) {
+                const target = e.target as HTMLInputElement;
+                if (target.checked) {
+                    target.checked = true;
+                    this.qString.setQueryParams(target.name, target.value);
+                } else {
+                    target.checked = false;
+                    this.qString.delQueryParams(target.name, target.value);
+                }
+                new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
+            }
+
+            if (target.closest('.goods-filter-radio__input')) {
+                const target = e.target as HTMLInputElement;
+                this.qString.delQueryKey('sort');
+                this.qString.setQueryParams(target.name, target.value);
+                new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
+            }
+
+            if (target.closest('.goods-cards__head-type-btn--4')) {         
+                document.querySelector('.goods-cards__head-type-btn--4')?.classList.add('goods-cards__head-type-btn--active');
+                document.querySelector('.goods-cards__head-type-btn--3')?.classList.remove('goods-cards__head-type-btn--active');
+
+                document.querySelector('.goods-cards__list')?.classList.add('goods-cards__list--4');
+                document.querySelector('.goods-cards__list')?.classList.remove('goods-cards__list--3');
+
+                localStorage.setItem('view-column', '4');
+            }
+
+            if (target.closest('.goods-cards__head-type-btn--3')) {
+                document.querySelector('.goods-cards__head-type-btn--3')?.classList.add('goods-cards__head-type-btn--active');
+                document.querySelector('.goods-cards__head-type-btn--4')?.classList.remove('goods-cards__head-type-btn--active');
+
+                document.querySelector('.goods-cards__list')?.classList.add('goods-cards__list--3');
+                document.querySelector('.goods-cards__list')?.classList.remove('goods-cards__list--4');
+
+                localStorage.setItem('view-column', '3');
+            }
+
+            if (target.closest('.goods-filter__reset')) {
+                this.qString.resetQueryString();
+                router.navigate('home', 'Secret Shop - Главная');
+                localStorage.setItem('lastPath', 'home');
+                this.typeView();
+                new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
+                const checkeds: NodeListOf<HTMLInputElement> = document.querySelectorAll('input:checked');
+
+                checkeds.forEach((item) => {
+                    item.checked = false;
+                });
+
+                const searchBar = document.querySelector('.goods-cards__head-search') as HTMLInputElement;
+                searchBar.value = '';
+            }
+
+            if (target.closest('.goods-filter__copy')) {
+                navigator.clipboard.writeText(`${window.location.href}`)
+                .then(() => {
+                    target.classList.add('goods-filter__btns-btn--active');
+                    target.textContent = 'Скопировано';
+                    
+                    setTimeout(() => {
+                        target.classList.remove('goods-filter__btns-btn--active');
+                        target.textContent = 'Копировать фильтры';
+                    }, 1000);
+                })
+                .catch((err) => {
+                    target.classList.add('goods-filter__btns-btn--error');
+                    target.textContent = 'Ошибка';
+                    console.log(err);
+
+                    setTimeout(() => {
+                        target.classList.remove('goods-filter__btns-btn--error');
+                        target.textContent = 'Копировать фильтры';
+                    }, 1000);
+                });
+            }
+        });
+
+        router.options.appDOM.addEventListener('keyup', (e) => {
+            e.preventDefault();
+            const target = e.target as HTMLInputElement;
+            if (target.closest('.goods-cards__head-search')) {
+                this.qString.delQueryKey('search');
+                this.qString.setQueryParams(target.name, target.value);
+                if (target.value === '') {
+                    this.qString.delQueryKey('search');
+                }
+                new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
             }
         });
     }
