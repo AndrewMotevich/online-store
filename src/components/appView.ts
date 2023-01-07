@@ -1,6 +1,7 @@
-import MainPage from "./mainPage";
-import router from "./router";
-import { QString } from "./qString";
+import MainPage from './mainPage';
+import router from './router';
+import { QString } from './qString';
+import { Basket, BasketMemory } from './basketLogic';
 
 class Cards {
     mainPage;
@@ -13,10 +14,14 @@ class Cards {
     render() {
         if (localStorage.getItem('view-column') === '3') {
             document.querySelector('.goods-cards__list')?.classList.add('goods-cards__list--3');
-            document.querySelector('.goods-cards__head-type-btn--3')?.classList.add('goods-cards__head-type-btn--active');
+            document
+                .querySelector('.goods-cards__head-type-btn--3')
+                ?.classList.add('goods-cards__head-type-btn--active');
         } else {
             document.querySelector('.goods-cards__list')?.classList.add('goods-cards__list--4');
-            document.querySelector('.goods-cards__head-type-btn--4')?.classList.add('goods-cards__head-type-btn--active');
+            document
+                .querySelector('.goods-cards__head-type-btn--4')
+                ?.classList.add('goods-cards__head-type-btn--active');
         }
         let result = '';
         if (this.mainPage.filterTest().length === 0) {
@@ -25,11 +30,21 @@ class Cards {
         }
         document.querySelector('.goods-cards__not-found')?.classList.remove('goods-cards__not-found--active');
         this.mainPage.filterTest().forEach((card) => {
+            const basketItems = new BasketMemory().getAllItemsInBasket();
+            const buttonTexts = ['В&nbsp;корзину', 'Добавлено'];
+            const buttonClass = ['card__buy', 'card__buy card__buy--in-basket'];
+            let text = buttonTexts[0];
+            let className = buttonClass[0];
+            basketItems.forEach((item) => {
+                if (item.id === card.id) {text = buttonTexts[1]; className = buttonClass[1];}
+            });
             result += `
-            <li class="goods-cards__item card" data-id="${card.id}" style="background: no-repeat center url(${card.img1}) var(--color-dark); background-size: cover">
+            <li class="goods-cards__item card" data-id="${card.id}" style="background: no-repeat center url(${
+                card.img1
+            }) var(--color-dark); background-size: cover">
                 <div class="card__hero hero" data-id="${card.id}">
                 <img
-                    src=${card["hero-icon"]}
+                    src=${card['hero-icon']}
                     alt="" class="hero__avatar" data-id="${card.id}">
                 <span class="hero__rareness ${card.rarity.toLowerCase()}" data-id="${card.id}">${card.rarity}</span>
                 <span class="hero__name" data-id="${card.id}">${card.hero}</span>
@@ -39,7 +54,7 @@ class Cards {
                 <span class="card__price-cur" data-id="${card.id}">руб</span>
                 </div>
                 <h3 class="card__name" data-id="${card.id}">${card['item-name']}</h3>
-                <button class="card__buy">В&nbsp;корзину</button>
+                <button class="${className}" data-id="${card.id}">${text}</button>
             </li>
             `;
         });
@@ -68,10 +83,14 @@ class AppView {
     typeView() {
         if (localStorage.getItem('view-column') === '3') {
             document.querySelector('.goods-cards__list')?.classList.add('goods-cards__list--3');
-            document.querySelector('.goods-cards__head-type-btn--3')?.classList.add('goods-cards__head-type-btn--active');
+            document
+                .querySelector('.goods-cards__head-type-btn--3')
+                ?.classList.add('goods-cards__head-type-btn--active');
         } else {
             document.querySelector('.goods-cards__list')?.classList.add('goods-cards__list--4');
-            document.querySelector('.goods-cards__head-type-btn--4')?.classList.add('goods-cards__head-type-btn--active');
+            document
+                .querySelector('.goods-cards__head-type-btn--4')
+                ?.classList.add('goods-cards__head-type-btn--active');
         }
     }
 
@@ -83,25 +102,26 @@ class AppView {
             this.filterChecker();
             this.typeView();
         });
-        
+
         window.addEventListener('popstate', () => {
             router.init();
         });
-        
+
         document.querySelector('.header__logo')?.addEventListener('click', (e) => {
             e.preventDefault();
-            this.qString.resetQueryString();
+            // this.qString.resetQueryString();
             router.navigate('home', 'Secret Shop - Главная');
             localStorage.setItem('lastPath', 'home');
             new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
             this.typeView();
         });
-        
+
         document.querySelector('.header__basket')?.addEventListener('click', (e) => {
             e.preventDefault();
             router.navigate('basket', 'Secret Shop - Корзина');
+            new Basket().drawItems();
         });
-        
+
         router.options.appDOM.addEventListener('click', (e) => {
             const target = e.target as HTMLElement;
             if (target.closest('.card__buy')) {
@@ -112,7 +132,7 @@ class AppView {
                 router.navigate(`products/${target.dataset.id}`, `Secret Shop - Товар`);
             }
 
-            if(target.closest('.goods-filter-input')) {
+            if (target.closest('.goods-filter-input')) {
                 const target = e.target as HTMLInputElement;
                 if (target.checked) {
                     target.checked = true;
@@ -122,6 +142,7 @@ class AppView {
                     this.qString.delQueryParams(target.name, target.value);
                 }
                 new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
+                router.navigate('home', 'Secret Shop - Главная');
             }
 
             if (target.closest('.goods-filter-radio__input')) {
@@ -131,9 +152,13 @@ class AppView {
                 new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
             }
 
-            if (target.closest('.goods-cards__head-type-btn--4')) {         
-                document.querySelector('.goods-cards__head-type-btn--4')?.classList.add('goods-cards__head-type-btn--active');
-                document.querySelector('.goods-cards__head-type-btn--3')?.classList.remove('goods-cards__head-type-btn--active');
+            if (target.closest('.goods-cards__head-type-btn--4')) {
+                document
+                    .querySelector('.goods-cards__head-type-btn--4')
+                    ?.classList.add('goods-cards__head-type-btn--active');
+                document
+                    .querySelector('.goods-cards__head-type-btn--3')
+                    ?.classList.remove('goods-cards__head-type-btn--active');
 
                 document.querySelector('.goods-cards__list')?.classList.add('goods-cards__list--4');
                 document.querySelector('.goods-cards__list')?.classList.remove('goods-cards__list--3');
@@ -142,8 +167,12 @@ class AppView {
             }
 
             if (target.closest('.goods-cards__head-type-btn--3')) {
-                document.querySelector('.goods-cards__head-type-btn--3')?.classList.add('goods-cards__head-type-btn--active');
-                document.querySelector('.goods-cards__head-type-btn--4')?.classList.remove('goods-cards__head-type-btn--active');
+                document
+                    .querySelector('.goods-cards__head-type-btn--3')
+                    ?.classList.add('goods-cards__head-type-btn--active');
+                document
+                    .querySelector('.goods-cards__head-type-btn--4')
+                    ?.classList.remove('goods-cards__head-type-btn--active');
 
                 document.querySelector('.goods-cards__list')?.classList.add('goods-cards__list--3');
                 document.querySelector('.goods-cards__list')?.classList.remove('goods-cards__list--4');
@@ -152,6 +181,7 @@ class AppView {
             }
 
             if (target.closest('.goods-filter__reset')) {
+                localStorage.setItem("basketArray", "");
                 this.qString.resetQueryString();
                 router.navigate('home', 'Secret Shop - Главная');
                 localStorage.setItem('lastPath', 'home');
@@ -168,26 +198,27 @@ class AppView {
             }
 
             if (target.closest('.goods-filter__copy')) {
-                navigator.clipboard.writeText(`${window.location.href}`)
-                .then(() => {
-                    target.classList.add('goods-filter__btns-btn--active');
-                    target.textContent = 'Скопировано';
-                    
-                    setTimeout(() => {
-                        target.classList.remove('goods-filter__btns-btn--active');
-                        target.textContent = 'Копировать фильтры';
-                    }, 1000);
-                })
-                .catch((err) => {
-                    target.classList.add('goods-filter__btns-btn--error');
-                    target.textContent = 'Ошибка';
-                    console.log(err);
+                navigator.clipboard
+                    .writeText(`${window.location.href}`)
+                    .then(() => {
+                        target.classList.add('goods-filter__btns-btn--active');
+                        target.textContent = 'Скопировано';
 
-                    setTimeout(() => {
-                        target.classList.remove('goods-filter__btns-btn--error');
-                        target.textContent = 'Копировать фильтры';
-                    }, 1000);
-                });
+                        setTimeout(() => {
+                            target.classList.remove('goods-filter__btns-btn--active');
+                            target.textContent = 'Копировать фильтры';
+                        }, 1000);
+                    })
+                    .catch((err) => {
+                        target.classList.add('goods-filter__btns-btn--error');
+                        target.textContent = 'Ошибка';
+                        console.log(err);
+
+                        setTimeout(() => {
+                            target.classList.remove('goods-filter__btns-btn--error');
+                            target.textContent = 'Копировать фильтры';
+                        }, 1000);
+                    });
             }
         });
 
@@ -206,5 +237,4 @@ class AppView {
     }
 }
 
-
-export {AppView, Cards};
+export { AppView, Cards };

@@ -22,5 +22,12 @@ type QueryParams = {
     hero: Array<string> | Array<string>;
     rarity: Array<string> | Array<string>;
     search: Array<string> | Array<string>;
+    currentPage: Array<string>;
+    limit: Array<string>;
 };
-export { ICard, QueryParams };
+type basketItem = {
+    order: number;
+    id: number;
+    itemQnt: number;
+}
+export { ICard, QueryParams, basketItem};
