@@ -29,5 +29,8 @@ type basketItem = {
     order: number;
     id: number;
     itemQnt: number;
+    itemPrice: number;
+    itemPricesSum:number;
+    stock: number;
 }
 export { ICard, QueryParams, basketItem};

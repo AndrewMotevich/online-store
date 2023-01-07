@@ -54,6 +54,7 @@ class Router {
     }
 
     init() {
+        new BasketMemory().putDataToHeader();
         if (this.current === this.getFragment()) {
             return;
         }
@@ -93,6 +94,19 @@ const router = new Router({
 router
     .add('basket', () => {
         router.options.appDOM.innerHTML = basketTemplate;
+        const basket = new BasketMemory();
+        basket.putDataToBasketTotal();
+        document.body.addEventListener('click',(event) => {
+                if (((event.target) as HTMLElement).dataset.operator === 'plus'){
+                    basket.increaseItemQnt(((event.target) as HTMLElement).dataset.id as string);
+                }
+                else if (((event.target) as HTMLElement).dataset.operator === 'minus'){
+                    basket.decreaseItemQnt(((event.target) as HTMLElement).dataset.id as string);
+                }
+                else if (((event.target) as HTMLElement).dataset.operator === 'delete'){
+                    basket.removeItemFromBasket(((event.target) as HTMLElement).dataset.id as string);
+                }
+        });
     })
     .add('form', () => {
         router.options.appDOM.innerHTML = modalWindowTemplate;
@@ -108,14 +122,13 @@ router
                     ((event.target)as HTMLElement).innerHTML = 'В&nbsp;корзину';
                     ((event.target)as HTMLElement).classList.remove('card__buy--in-basket');
                     basket.removeItemFromBasket(((event.target)as HTMLElement).dataset.id as string);
-                    console.log(basket.getAllItemsInBasket());
                 }
                 else {
                     ((event.target)as HTMLElement).innerText = 'Добавлено';
                     ((event.target)as HTMLElement).classList.add('card__buy--in-basket');
                     basket.addItemToBasket(((event.target)as HTMLElement).dataset.id as string);
-                    console.log(basket.getAllItemsInBasket());
                 }
+                new BasketMemory().putDataToHeader();
             }
         });
         router.options.appDOM.innerHTML = cardsTemplate;
