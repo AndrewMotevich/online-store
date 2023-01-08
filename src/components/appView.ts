@@ -2,8 +2,11 @@ import MainPage from './mainPage';
 import router from './router';
 import { QString } from './qString';
 import { Basket, BasketMemory } from './basketLogic';
-import { Product } from './product';
+import { Product } from "./product";
+import { Controller } from './controller';
+import { ICard } from './types';
 import { basketTemplate } from '../templates/basket';
+
 
 class Cards {
     mainPage;
@@ -72,9 +75,13 @@ class Cards {
 class AppView {
     qString;
     product;
+    basketMemory;
+    controller;
     constructor() {
         this.qString = new QString();
         this.product = new Product();
+        this.basketMemory = new BasketMemory();
+        this.controller = new Controller();
     }
 
     filterChecker() {
@@ -290,6 +297,74 @@ class AppView {
                             target.textContent = 'Копировать фильтры';
                         }, 1000);
                     });
+            }
+
+            if (target.closest('.basket-items__item-delete')) {
+                new Basket().drawItems();
+            }
+
+            if (target.closest('.description_button')) {
+                const id = target.dataset.id as string;
+                if (target.classList.contains('description_button--not-add')) {
+                    this.basketMemory.addItemToBasket(id);
+                    target.textContent = 'Добавлено';
+                } else if (target.classList.contains('description_button--add')) {
+                    this.basketMemory.removeItemFromBasket(id);
+                    target.textContent = 'В корзину';
+                }
+                target.classList.toggle('description_button--add');
+                target.classList.toggle('description_button--not-add');
+            }
+
+            if (target.closest('.info-field_img-img')) {
+                const target = e.target as HTMLImageElement;
+                const src = target.src;
+                this.product.renderBigImg(src);
+            }
+
+            if (target.closest('.arrow-right')) {
+                const id = Number(target.dataset.id);
+                const img = document.querySelector('.info-field_img-img') as HTMLImageElement;
+                const productObj = this.controller.getCardById(id) as ICard;
+                if (img.src === productObj.img1) {
+                    img.src = productObj.img2;
+                } else if (img.src === productObj.img2) {
+                    img.src = productObj.img1;
+                }
+            }
+
+            if (target.closest('.arrow-left')) {
+                const id = Number(target.dataset.id);
+                const img = document.querySelector('.info-field_img-img') as HTMLImageElement;
+                const productObj = this.controller.getCardById(id) as ICard;
+                if (img.src === productObj.img1) {
+                    img.src = productObj.img2;
+                } else if (img.src === productObj.img2) {
+                    img.src = productObj.img1;
+                }
+            }
+
+            if (target.closest('.info-field__video')) {
+                target.classList.toggle('info-field__video--active');
+                target.classList.toggle('info-field__video--not-active');
+                const id = Number(target.dataset.id);
+                const productObj = this.controller.getCardById(id) as ICard;
+                const video = document.createElement('video');
+                video.src = productObj['video-link'];
+                video.classList.add('info-field__video-video');
+                video.loop = true;
+                video.autoplay = true;
+                video.muted = true;
+
+                if (target.classList.contains('info-field__video--active')) {
+                    target.textContent = 'Остановить';
+                    document.querySelector('.info-field_img')?.append(video);
+                }
+
+                if (target.classList.contains('info-field__video--not-active')) {
+                    target.textContent = 'Видео';
+                    document.querySelector('.info-field__video-video')?.remove();
+                }
             }
         });
 

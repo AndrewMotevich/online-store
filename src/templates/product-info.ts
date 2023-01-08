@@ -18,7 +18,7 @@ const productTemplate = `<div class="goods-details_wrapper container">
 <section class="goods-details_info-field">
   <h2 class="visually-hidden">описание товара</h2>
   <div class="info-field_img">
-    <img src="https://collectorsshop.ru/img/catalog/items/main_images/2022/11/625.png"
+    <img class="info-field_img-img" src="https://collectorsshop.ru/img/catalog/items/main_images/2022/11/625.png"
       alt="goods image">
     <div class="arrows">
       <button class="arrow-left">&#8592</button>
