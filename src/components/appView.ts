@@ -207,6 +207,7 @@ class AppView {
                 } else if ((e.target as HTMLElement).dataset.operator === 'delete') {
                     e.preventDefault();
                     basket.removeItemFromBasket((e.target as HTMLElement).dataset.id as string);
+                    new Basket().restorePaginationValues();
                     if (basket.getAllItemsInBasket().length === 0) {
                         router.options.appDOM.innerHTML = basketTemplate;
                         basket.putDataToHeader();

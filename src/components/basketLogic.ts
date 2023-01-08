@@ -122,6 +122,7 @@ class BasketMemory {
         return this.basketArray;
     }
     removeItemFromBasket(id: string) {
+      const itemQnt = document.querySelector('.basket-items__per-page-num') as HTMLInputElement;
         const data: basketItem[] = this.getAllItemsInBasket();
         const tempResult: basketItem[] = [];
         data.forEach((elem) => {
@@ -133,7 +134,7 @@ class BasketMemory {
         const stringify = JSON.stringify(this.basketArray);
         localStorage.setItem('basketArray', stringify);
         this.resolveOrder();
-        this.resolvePages();
+        this.resolvePages(Number(itemQnt.value));
     }
     increaseItemQnt(id: string) {
         const data = this.getAllItemsInBasket();
