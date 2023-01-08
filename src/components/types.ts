@@ -32,5 +32,6 @@ type basketItem = {
     itemPrice: number;
     itemPricesSum:number;
     stock: number;
+    currentPage: number;
 }
 export { ICard, QueryParams, basketItem};

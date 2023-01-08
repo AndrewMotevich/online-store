@@ -1,6 +1,7 @@
 import { Controller } from './controller';
 import { QString } from './qString';
 import { ICard, basketItem, QueryParams } from './types';
+// import router from './router';
 
 class Basket {
     data: ICard[];
@@ -14,11 +15,16 @@ class Basket {
         this.testQueryParameters = this.qString.hasQuery() ? this.qString.getQueryObject() : this.qString.result;
     }
     drawItems() {
-        const basketMemory = new BasketMemory();
-        const itemsList = basketMemory.getAllItemsInBasket();
-        const appDom = document.querySelector('.basket-items__list') as HTMLElement;
-        appDom.innerHTML = '';
+      this.restorePaginationValues();
+      const basketMemory = new BasketMemory();
+      const itemsList = basketMemory.getAllItemsInBasket();
+      const appDom = document.querySelector('.basket-items__list') as HTMLElement;
+      const paginationValues = this.getPaginationValues();
+      basketMemory.resolvePages(paginationValues[0]);
+      appDom.innerHTML = '';
+      (document.querySelector('.basket-items__list') as HTMLElement).style.counterReset = `custom-counter ${paginationValues[0]*(paginationValues[1] - 1)}`;
         itemsList.forEach((item) => {
+          if (item.currentPage === paginationValues[1]){
             const itemData = new Controller().getCardById(item.id) as ICard;
             const li = document.createElement('li');
             li.classList.add('basket-items__item');
@@ -61,16 +67,28 @@ class Basket {
         </div>`;
             li.dataset.id = item.id.toString();
             appDom?.appendChild(li);
+          }
         });
     }
-    pagination(limit = 3, page = 1) {
-        const itemQnt = document.querySelector('.basket-items__per-page-num') as HTMLInputElement;
-        const currentPage = document.querySelector('.basket-items__slider-count') as HTMLInputElement;
-        this.qString.setQueryParams('limit', `${limit}`);
-        this.qString.setQueryParams('currentPage', `${page}`);
-        this.testQueryParameters = this.qString.getQueryObject();
-        itemQnt.value = this.testQueryParameters['limit'][0];
-        currentPage.innerText = this.testQueryParameters['currentPage'][0];
+    putPaginationValues(limit = 5, page = 1) {
+      this.qString.resetQueryString();
+      this.qString.setQueryParams('limit', `${limit}`);
+      this.qString.setQueryParams('currentPage', `${page}`);
+    }
+    restorePaginationValues(){
+      this.qString.setQueryParams('hero', 'Lina');
+      const itemQnt = document.querySelector('.basket-items__per-page-num') as HTMLInputElement;
+      const currentPage = document.querySelector('.basket-items__slider-count') as HTMLElement;
+        if (this.qString.getQueryObject().limit[0] != undefined){
+          itemQnt.value = this.qString.getQueryObject().limit[0].toString();
+          currentPage.innerText = this.qString.getQueryObject().currentPage[0].toString();
+        }
+    }
+    getPaginationValues() {
+        const length = new BasketMemory().getAllItemsInBasket().length;
+        const itemQnt = (document.querySelector('.basket-items__per-page-num') as HTMLInputElement).value;
+        const currentPage = (document.querySelector('.basket-items__slider-count') as HTMLElement).innerText;
+        return [Number(itemQnt), Number(currentPage), length];
     }
 }
 
@@ -90,12 +108,13 @@ class BasketMemory {
             itemQnt: 1,
             itemPrice: itemData.price,
             itemPricesSum: itemData.price,
-            stock: itemData.stock
+            stock: itemData.stock,
+            currentPage: 1,
         };
         this.basketArray.push(item);
         const stringify = JSON.stringify(this.basketArray);
         localStorage.setItem('basketArray', stringify);
-        this.order += 1;
+        this.resolveOrder();
     }
     getAllItemsInBasket() {
         const parsData = localStorage.getItem('basketArray');
@@ -114,54 +133,77 @@ class BasketMemory {
         this.basketArray = tempResult;
         const stringify = JSON.stringify(this.basketArray);
         localStorage.setItem('basketArray', stringify);
+        this.resolveOrder();
+        this.resolvePages();
     }
     increaseItemQnt(id: string) {
         const data = this.getAllItemsInBasket();
-        data.forEach((elem)=>{
-          if (elem.itemQnt === elem.stock) {alert('К сожаленю, это все, что есть на складе');}
-          if (elem.id === Number(id) && elem.itemQnt < elem.stock && elem.itemQnt >= 1){
-            elem.itemQnt += 1;
-            elem.itemPricesSum = elem.itemPrice * elem.itemQnt;
-          }
+        data.forEach((elem) => {
+            if (elem.id === Number(id) && elem.itemQnt >= 1) {
+                if (elem.itemQnt === elem.stock) {
+                    alert('К сожаленю, это все, что есть на складе');
+                } else {
+                    elem.itemQnt += 1;
+                    elem.itemPricesSum = elem.itemPrice * elem.itemQnt;
+                }
+            }
         });
         this.basketArray = data;
         const stringify = JSON.stringify(data);
         localStorage.setItem('basketArray', stringify);
     }
     decreaseItemQnt(id: string) {
-      const data = this.getAllItemsInBasket();
-      data.forEach((elem)=>{
-        if (elem.id === Number(id) && elem.itemQnt <= elem.stock && elem.itemQnt >= 2){
-          elem.itemQnt -= 1;
-          elem.itemPricesSum = elem.itemPrice * elem.itemQnt;
+        const data = this.getAllItemsInBasket();
+        data.forEach((elem) => {
+            if (elem.id === Number(id) && elem.itemQnt <= elem.stock && elem.itemQnt >= 2) {
+                elem.itemQnt -= 1;
+                elem.itemPricesSum = elem.itemPrice * elem.itemQnt;
+            }
+        });
+        this.basketArray = data;
+        const stringify = JSON.stringify(data);
+        localStorage.setItem('basketArray', stringify);
+    }
+    getAllQntAndSum() {
+        const data = this.getAllItemsInBasket();
+        const result: number[] = [0, 0];
+        data.forEach((elem) => {
+            result[0] += elem.itemPricesSum;
+            result[1] += elem.itemQnt;
+        });
+        return result;
+    }
+    putDataToHeader() {
+        const data = this.getAllQntAndSum();
+        const headerPrice = document.querySelector('.header__cost-num') as HTMLElement;
+        const headerQnt = document.querySelector('.header__basket-count') as HTMLElement;
+        headerPrice.innerHTML = data[0].toString();
+        headerQnt.innerHTML = data[1].toString();
+    }
+    putDataToBasketTotal() {
+        const resultData = this.getAllQntAndSum();
+        const basketTotalPrice = document.querySelector('.basket-pay__price-num') as HTMLElement;
+        const basketQnt = document.querySelector('.basket-pay__amount-num') as HTMLElement;
+        basketTotalPrice.innerHTML = resultData[0].toString();
+        basketQnt.innerHTML = resultData[1].toString();
+    }
+    resolvePages(limit = 5) {
+        const data = this.getAllItemsInBasket();
+        data.forEach((item) => {
+            item.currentPage = Math.ceil(item.order / limit);
+        });
+        const stringify = JSON.stringify(data);
+        localStorage.setItem('basketArray', stringify);
+    }
+    resolveOrder() {
+        const data = this.getAllItemsInBasket();
+        for (let i = 0; i < data.length; i += 1) {
+            if (data[i].order != i + 1) {
+                data[i].order = i + 1;
+            }
         }
-      });
-      this.basketArray = data;
-      const stringify = JSON.stringify(data);
-      localStorage.setItem('basketArray', stringify);
-    }
-    getAllQntAndSum(){
-      const data = this.getAllItemsInBasket();
-      const result: number[] = [0,0];
-      data.forEach((elem)=>{
-        result[0] += elem.itemPricesSum;
-        result[1] += elem.itemQnt;
-      });
-      return result;
-    }
-    putDataToHeader(){
-      const data = this.getAllQntAndSum();
-      const headerPrice = document.querySelector('.header__cost-num') as HTMLElement;
-      const headerQnt = document.querySelector('.header__basket-count') as HTMLElement;
-      headerPrice.innerHTML = data[0].toString();
-      headerQnt.innerHTML = data[1].toString();
-    }
-    putDataToBasketTotal(){
-      const resultData = this.getAllQntAndSum();
-      const basketTotalPrice = document.querySelector('.basket-pay__price-num') as HTMLElement;
-      const basketQnt = document.querySelector('.basket-pay__amount-num') as HTMLElement;
-      basketTotalPrice.innerHTML = resultData[0].toString();
-      basketQnt.innerHTML = resultData[1].toString();
+        const stringify = JSON.stringify(data);
+        localStorage.setItem('basketArray', stringify);
     }
 }
 
