@@ -1,4 +1,5 @@
 import { QueryParams} from './types';
+import router from './router';
 
 class QString {
     result: QueryParams;
@@ -31,6 +32,7 @@ class QString {
                 this.result[key as keyof QueryParams] = value.split('%2C+');
             }
         });
+        console.log(this.result);
         return this.result;
     }
 
@@ -47,8 +49,9 @@ class QString {
         searchParams.set(key, value);
         const newRelativePathQuery = `${window.location.pathname}?${searchParams}`;
         history.pushState(null, '', newRelativePathQuery);
-
+        const urlFragment = router.getFragment();
         localStorage.setItem('lastPath', `home${window.location.search}`);
+        return console.log("URLFragment",urlFragment);
     }
 
     delQueryParams(key: string, value: string) {

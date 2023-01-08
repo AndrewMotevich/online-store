@@ -4,7 +4,6 @@ import { errorPageTemplate } from '../templates/error-page';
 import { modalWindowTemplate } from '../templates/modal-window';
 import { productTemplate } from '../templates/product-info';
 import { Cards } from './appView';
-import { BasketMemory } from './basketLogic';
 
 type IRouter = {
     path: string | RegExp;
@@ -54,7 +53,6 @@ class Router {
     }
 
     init() {
-        new BasketMemory().putDataToHeader();
         if (this.current === this.getFragment()) {
             return;
         }
@@ -94,19 +92,6 @@ const router = new Router({
 router
     .add('basket', () => {
         router.options.appDOM.innerHTML = basketTemplate;
-        const basket = new BasketMemory();
-        basket.putDataToBasketTotal();
-        document.body.addEventListener('click',(event) => {
-                if (((event.target) as HTMLElement).dataset.operator === 'plus'){
-                    basket.increaseItemQnt(((event.target) as HTMLElement).dataset.id as string);
-                }
-                else if (((event.target) as HTMLElement).dataset.operator === 'minus'){
-                    basket.decreaseItemQnt(((event.target) as HTMLElement).dataset.id as string);
-                }
-                else if (((event.target) as HTMLElement).dataset.operator === 'delete'){
-                    basket.removeItemFromBasket(((event.target) as HTMLElement).dataset.id as string);
-                }
-        });
     })
     .add('form', () => {
         router.options.appDOM.innerHTML = modalWindowTemplate;
@@ -115,22 +100,6 @@ router
         router.options.appDOM.innerHTML = productTemplate;
     })
     .add('home', () => {
-        document.body.addEventListener('click', (event) => {
-            const basket = new BasketMemory();
-            if (((event.target)as HTMLElement).className === 'card__buy' || ((event.target)as HTMLElement).className === 'card__buy card__buy--in-basket'){
-                if (((event.target)as HTMLElement).classList.value.split(' ').includes('card__buy--in-basket')){
-                    ((event.target)as HTMLElement).innerHTML = 'В&nbsp;корзину';
-                    ((event.target)as HTMLElement).classList.remove('card__buy--in-basket');
-                    basket.removeItemFromBasket(((event.target)as HTMLElement).dataset.id as string);
-                }
-                else {
-                    ((event.target)as HTMLElement).innerText = 'Добавлено';
-                    ((event.target)as HTMLElement).classList.add('card__buy--in-basket');
-                    basket.addItemToBasket(((event.target)as HTMLElement).dataset.id as string);
-                }
-                new BasketMemory().putDataToHeader();
-            }
-        });
         router.options.appDOM.innerHTML = cardsTemplate;
         new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
     })

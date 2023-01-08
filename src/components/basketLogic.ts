@@ -70,7 +70,6 @@ class Basket {
         this.testQueryParameters = this.qString.getQueryObject();
         itemQnt.value = this.testQueryParameters['limit'][0];
         currentPage.innerText = this.testQueryParameters['currentPage'][0];
-        return 1;
     }
 }
 

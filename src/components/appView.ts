@@ -109,7 +109,7 @@ class AppView {
 
         document.querySelector('.header__logo')?.addEventListener('click', (e) => {
             e.preventDefault();
-            // this.qString.resetQueryString();
+            this.qString.resetQueryString();
             router.navigate('home', 'Secret Shop - Главная');
             localStorage.setItem('lastPath', 'home');
             new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
@@ -120,9 +120,37 @@ class AppView {
             e.preventDefault();
             router.navigate('basket', 'Secret Shop - Корзина');
             new Basket().drawItems();
+            new Basket().pagination(3,3);
         });
 
         router.options.appDOM.addEventListener('click', (e) => {
+
+            const basket = new BasketMemory();
+            // basket.putDataToBasketTotal();
+            if (((e.target) as HTMLElement).dataset.operator === 'plus'){
+                basket.increaseItemQnt(((e.target) as HTMLElement).dataset.id as string);
+            }
+            else if (((e.target) as HTMLElement).dataset.operator === 'minus'){
+                basket.decreaseItemQnt(((e.target) as HTMLElement).dataset.id as string);
+            }
+            else if (((e.target) as HTMLElement).dataset.operator === 'delete'){
+                basket.removeItemFromBasket(((e.target) as HTMLElement).dataset.id as string);
+            }
+
+            if (((e.target)as HTMLElement).className === 'card__buy' || ((e.target)as HTMLElement).className === 'card__buy card__buy--in-basket'){
+                if (((e.target)as HTMLElement).classList.value.split(' ').includes('card__buy--in-basket')){
+                    ((e.target)as HTMLElement).innerHTML = 'В&nbsp;корзину';
+                    ((e.target)as HTMLElement).classList.remove('card__buy--in-basket');
+                    basket.removeItemFromBasket(((e.target)as HTMLElement).dataset.id as string);
+                }
+                else {
+                    ((e.target)as HTMLElement).innerText = 'Добавлено';
+                    ((e.target)as HTMLElement).classList.add('card__buy--in-basket');
+                    basket.addItemToBasket(((e.target)as HTMLElement).dataset.id as string);
+                }
+                new BasketMemory().putDataToHeader();
+            }
+
             const target = e.target as HTMLElement;
             if (target.closest('.card__buy')) {
                 return false;
