@@ -90,6 +90,10 @@
             padding: 16px 20px;
             background-color: var(--bg-secondary);
             border-radius: 15px;
+            &:hover{
+                cursor: pointer;
+                box-shadow: 2px 2px 0px 0px red;
+            }
             &::before{
                 content: counter(custom-counter);
                 text-align: center;
