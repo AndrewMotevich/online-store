@@ -153,3 +153,55 @@ a:focus-visible {
 .arcana-border{
     border: 1px solid var(--color-arcana);
 }
+
+.big-img{
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+    &__overlay{
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 100;
+        background: rgba(41,41,41,0.6);
+        cursor: pointer;
+    }
+    &__img{
+        width: 100%;
+        border-radius: 9px;
+        &-wrap{
+            display: flex;
+            width: 800px;
+            justify-content: space-between;
+            position: relative;
+            z-index: 101;
+        }
+    }
+    &__close{
+        width: 52px;
+        height: 52px;
+        border: 2px solid var(--color-accent);
+        border-radius: 100%;
+        background-color: transparent;
+        cursor: pointer;
+        position: absolute;
+        right: -42px;
+        top: -54px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: border 0.4s ease-in-out, background-color 0.4s ease-in-out;
+        &-icon{
+            width: 20px;
+            fill: var(--color-accent);
+        }
+    }
+}

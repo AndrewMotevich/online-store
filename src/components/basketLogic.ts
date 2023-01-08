@@ -113,7 +113,6 @@ class BasketMemory {
         this.basketArray = tempResult;
         const stringify = JSON.stringify(this.basketArray);
         localStorage.setItem('basketArray', stringify);
-        new Basket().drawItems();
     }
     increaseItemQnt(id: string) {
         const data = this.getAllItemsInBasket();
