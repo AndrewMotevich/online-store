@@ -2,8 +2,8 @@ import MainPage from './mainPage';
 import router from './router';
 import { QString } from './qString';
 import { Basket, BasketMemory } from './basketLogic';
-import { Product } from "./product";
-
+import { Product } from './product';
+import { basketTemplate } from '../templates/basket';
 
 class Cards {
     mainPage;
@@ -38,7 +38,10 @@ class Cards {
             let text = buttonTexts[0];
             let className = buttonClass[0];
             basketItems.forEach((item) => {
-                if (item.id === card.id) {text = buttonTexts[1]; className = buttonClass[1];}
+                if (item.id === card.id) {
+                    text = buttonTexts[1];
+                    className = buttonClass[1];
+                }
             });
             result += `
             <li class="goods-cards__item card" data-id="${card.id}" style="background: no-repeat center url(${
@@ -122,7 +125,7 @@ class AppView {
 
         document.querySelector('.header__logo')?.addEventListener('click', (e) => {
             e.preventDefault();
-            this.qString.resetQueryString();
+            // this.qString.resetQueryString();
             router.navigate('home', 'Secret Shop - Главная');
             localStorage.setItem('lastPath', 'home');
             new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
@@ -130,41 +133,66 @@ class AppView {
         });
 
         document.querySelector('.header__basket')?.addEventListener('click', (e) => {
+            const basket = new BasketMemory();
             e.preventDefault();
             router.navigate('basket', 'Secret Shop - Корзина');
+            basket.putDataToBasketTotal();
             new Basket().drawItems();
-            new Basket().pagination(3,3);
+            // new Basket().pagination(3, 3);
         });
-
+        
         router.options.appDOM.addEventListener('click', (e) => {
-
+            const target = e.target as HTMLElement;
             const basket = new BasketMemory();
-            // basket.putDataToBasketTotal();
-            if (((e.target) as HTMLElement).dataset.operator === 'plus'){
-                basket.increaseItemQnt(((e.target) as HTMLElement).dataset.id as string);
-            }
-            else if (((e.target) as HTMLElement).dataset.operator === 'minus'){
-                basket.decreaseItemQnt(((e.target) as HTMLElement).dataset.id as string);
-            }
-            else if (((e.target) as HTMLElement).dataset.operator === 'delete'){
-                basket.removeItemFromBasket(((e.target) as HTMLElement).dataset.id as string);
+            //basket navigate to product
+            if (target.closest('.basket-items__item')) {
+                if ((e.target as HTMLElement).dataset.operator === 'plus') {
+                    e.stopImmediatePropagation();
+                    basket.increaseItemQnt((e.target as HTMLElement).dataset.id as string);
+                    basket.putDataToBasketTotal();
+                    basket.putDataToHeader();
+                    new Basket().drawItems();
+                } else if ((e.target as HTMLElement).dataset.operator === 'minus') {
+                    e.stopImmediatePropagation();
+                    basket.decreaseItemQnt((e.target as HTMLElement).dataset.id as string);
+                    basket.putDataToBasketTotal();
+                    basket.putDataToHeader();
+                    new Basket().drawItems();
+                } else if ((e.target as HTMLElement).dataset.operator === 'delete') {
+                    e.stopImmediatePropagation();
+                    basket.removeItemFromBasket((e.target as HTMLElement).dataset.id as string);
+                    if (basket.getAllItemsInBasket().length === 0) {
+                        router.options.appDOM.innerHTML = basketTemplate;
+                        basket.putDataToHeader();
+                    } else {
+                        new Basket().drawItems();
+                        basket.putDataToBasketTotal();
+                        basket.putDataToHeader();
+                    }
+                }else {
+                    e.preventDefault();
+                    router.navigate(`products/${target.dataset.id}`, `Secret Shop - Товар`);
+                    const id = Number(target.dataset.id);
+                    this.product.render(id);
+                }
             }
 
-            if (((e.target)as HTMLElement).className === 'card__buy' || ((e.target)as HTMLElement).className === 'card__buy card__buy--in-basket'){
-                if (((e.target)as HTMLElement).classList.value.split(' ').includes('card__buy--in-basket')){
-                    ((e.target)as HTMLElement).innerHTML = 'В&nbsp;корзину';
-                    ((e.target)as HTMLElement).classList.remove('card__buy--in-basket');
-                    basket.removeItemFromBasket(((e.target)as HTMLElement).dataset.id as string);
-                }
-                else {
-                    ((e.target)as HTMLElement).innerText = 'Добавлено';
-                    ((e.target)as HTMLElement).classList.add('card__buy--in-basket');
-                    basket.addItemToBasket(((e.target)as HTMLElement).dataset.id as string);
+            if (
+                (e.target as HTMLElement).className === 'card__buy' ||
+                (e.target as HTMLElement).className === 'card__buy card__buy--in-basket'
+            ) {
+                if ((e.target as HTMLElement).classList.value.split(' ').includes('card__buy--in-basket')) {
+                    (e.target as HTMLElement).innerHTML = 'В&nbsp;корзину';
+                    (e.target as HTMLElement).classList.remove('card__buy--in-basket');
+                    basket.removeItemFromBasket((e.target as HTMLElement).dataset.id as string);
+                } else {
+                    (e.target as HTMLElement).innerText = 'Добавлено';
+                    (e.target as HTMLElement).classList.add('card__buy--in-basket');
+                    basket.addItemToBasket((e.target as HTMLElement).dataset.id as string);
                 }
                 new BasketMemory().putDataToHeader();
             }
 
-            const target = e.target as HTMLElement;
             if (target.closest('.card__buy')) {
                 return false;
             }
@@ -224,7 +252,7 @@ class AppView {
             }
 
             if (target.closest('.goods-filter__reset')) {
-                localStorage.setItem("basketArray", "");
+                localStorage.setItem('basketArray', '');
                 this.qString.resetQueryString();
                 router.navigate('home', 'Secret Shop - Главная');
                 localStorage.setItem('lastPath', 'home');

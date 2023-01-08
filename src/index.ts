@@ -6,4 +6,3 @@ import "./assets/img/gold.png";
 import { AppView } from "./components/appView";
 const app = new AppView();
 app.init();
-localStorage.setItem('basketArray', '');
