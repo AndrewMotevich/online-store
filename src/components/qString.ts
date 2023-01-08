@@ -31,7 +31,6 @@ class QString {
                 this.result[key as keyof QueryParams] = value.split('%2C+');
             }
         });
-        console.log(this.result);
         return this.result;
     }
 
