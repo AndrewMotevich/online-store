@@ -2,6 +2,8 @@ import MainPage from './mainPage';
 import router from './router';
 import { QString } from './qString';
 import { Basket, BasketMemory } from './basketLogic';
+import { Product } from "./product";
+
 
 class Cards {
     mainPage;
@@ -66,8 +68,10 @@ class Cards {
 
 class AppView {
     qString;
+    product;
     constructor() {
         this.qString = new QString();
+        this.product = new Product();
     }
 
     filterChecker() {
@@ -101,10 +105,19 @@ class AppView {
             router.init();
             this.filterChecker();
             this.typeView();
+
+            if (localStorage.getItem('lastPath')?.includes('products/')) {
+                const id = Number(localStorage.getItem('lastPath')?.split('/')[1]);
+                this.product.render(id);
+            }
         });
 
         window.addEventListener('popstate', () => {
             router.init();
+            if (router.getFragment().includes('products/')) {
+                const id = Number(router.getFragment().split('/')[1]);
+                this.product.render(id);
+            }
         });
 
         document.querySelector('.header__logo')?.addEventListener('click', (e) => {
@@ -158,6 +171,8 @@ class AppView {
             if (target.closest('.goods-cards__item')) {
                 e.preventDefault();
                 router.navigate(`products/${target.dataset.id}`, `Secret Shop - Товар`);
+                const id = Number(target.dataset.id);
+                this.product.render(id);
             }
 
             if (target.closest('.goods-filter-input')) {

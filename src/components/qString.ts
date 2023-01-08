@@ -1,5 +1,4 @@
 import { QueryParams} from './types';
-import router from './router';
 
 class QString {
     result: QueryParams;
@@ -49,9 +48,8 @@ class QString {
         searchParams.set(key, value);
         const newRelativePathQuery = `${window.location.pathname}?${searchParams}`;
         history.pushState(null, '', newRelativePathQuery);
-        const urlFragment = router.getFragment();
-        localStorage.setItem('lastPath', `home${window.location.search}`);
-        return console.log("URLFragment",urlFragment);
+
+        localStorage.setItem('lastPath', `${localStorage.getItem('lastURLStart') || 'home'}${window.location.search}`);
     }
 
     delQueryParams(key: string, value: string) {
@@ -64,7 +62,7 @@ class QString {
         if (queryValues.length === 1) {
             searchParams.delete(key);
             history.pushState(null, '', `${window.location.pathname}?${searchParams.toString()}`);
-            localStorage.setItem('lastPath', `home${window.location.search}`);
+            localStorage.setItem('lastPath', `${localStorage.getItem('lastURLStart') || 'home'}${window.location.search}`);
             return;
         }
 
@@ -72,14 +70,14 @@ class QString {
         searchParams.set(key, newParams);
         const newRelativePathQuery = `${window.location.pathname}?${searchParams}`;
         history.pushState(null, '', newRelativePathQuery);
-        localStorage.setItem('lastPath', `home${window.location.search}`);
+        localStorage.setItem('lastPath', `${localStorage.getItem('lastURLStart') || 'home'}${window.location.search}`);
     }
 
     delQueryKey(key: string) {
         const searchParams = new URLSearchParams(window.location.search);
         searchParams.delete(key);
         history.pushState(null, '', `${window.location.pathname}?${searchParams.toString()}`);
-        localStorage.setItem('lastPath', `home${window.location.search}`);
+        localStorage.setItem('lastPath', `${localStorage.getItem('lastURLStart') || 'home'}${window.location.search}`);
     }
 
     resetQueryString() {
@@ -100,7 +98,7 @@ class QString {
             limit: []
         };
         history.pushState(null, '', window.location.pathname);
-        localStorage.setItem('lastPath', `home${window.location.search}`);
+        localStorage.setItem('lastPath', `${localStorage.getItem('lastURLStart') || 'home'}${window.location.search}`);
     }
 
     hasQuery() {
