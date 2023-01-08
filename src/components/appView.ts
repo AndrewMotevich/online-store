@@ -141,6 +141,7 @@ class AppView {
                 basket.putDataToHeader();
             } else {
                 basket.putDataToBasketTotal();
+                new Basket().restorePaginationValues();
                 new Basket().drawItems();
             }
         });

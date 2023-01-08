@@ -96,6 +96,7 @@ router
         router.options.appDOM.innerHTML = basketTemplate;
         new BasketMemory().putDataToBasketTotal();
         new BasketMemory().putDataToHeader();
+        new Basket().restorePaginationValues();
         new Basket().drawItems();
     })
     .add('form', () => {
