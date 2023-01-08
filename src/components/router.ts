@@ -47,6 +47,7 @@ class Router {
     }
 
     navigate(path = '', title = 'Secret Shop') {
+        localStorage.setItem('lastURLStart', path);
         document.title = title;
         window.location.href = `${window.location.href.replace(/#(.*)$/, '')}#${path}`;
         return this;
