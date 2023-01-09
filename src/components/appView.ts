@@ -114,6 +114,7 @@ class AppView {
     init() {
         document.addEventListener('DOMContentLoaded', () => {
             this.qString.resetQueryString();
+            new BasketMemory().putDataToHeader();
             router.navigate(`${localStorage.getItem('lastPath') ?? 'home'}`, 'Secret Shop - Главная');
             router.init();
             this.filterChecker();
@@ -135,7 +136,6 @@ class AppView {
 
         document.querySelector('.header__logo')?.addEventListener('click', (e) => {
             e.preventDefault();
-            // this.qString.resetQueryString();
             router.navigate('home', 'Secret Shop - Главная');
             localStorage.setItem('lastPath', 'home');
             new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
@@ -146,32 +146,79 @@ class AppView {
             const basket = new BasketMemory();
             e.preventDefault();
             router.navigate('basket', 'Secret Shop - Корзина');
-            basket.putDataToBasketTotal();
-            new Basket().drawItems();
-            // new Basket().pagination(3, 3);
+            if (basket.getAllItemsInBasket().length === 0) {
+                router.options.appDOM.innerHTML = basketTemplate;
+                basket.putDataToHeader();
+            } else {
+                basket.putDataToBasketTotal();
+                new Basket().restorePaginationValues();
+                new Basket().drawItems();
+            }
         });
         
         const bodyDOM = document.querySelector('body') as HTMLElement;
         bodyDOM.addEventListener('click', (e) => {
             const target = e.target as HTMLElement;
             const basket = new BasketMemory();
+            //basket pagination
+            if (target.closest('.basket-items__head')) {
+                if ((e.target as HTMLElement).dataset.operator === 'next') {
+                    if (
+                        (document.querySelector('.basket-items__slider-count') as HTMLElement).innerText >= '1' &&
+                        (document.querySelector('.basket-items__slider-count') as HTMLElement).innerText <
+                            Math.ceil(new Basket().getPaginationValues()[2] / new Basket().getPaginationValues()[0]).toString()
+                    ) {
+                        const pageNumber =
+                            Number((document.querySelector('.basket-items__slider-count') as HTMLElement).innerText) +
+                            1;
+                        (document.querySelector('.basket-items__slider-count') as HTMLElement).innerText =
+                            pageNumber.toString();
+                    }
+                    basket.putDataToBasketTotal();
+                    basket.putDataToHeader();
+                    new Basket().drawItems();
+                }
+                if ((e.target as HTMLElement).dataset.operator === 'previous') {
+                    if ((document.querySelector('.basket-items__slider-count') as HTMLElement).innerText > '1') {
+                        const pageNumber =
+                            Number((document.querySelector('.basket-items__slider-count') as HTMLElement).innerText) -
+                            1;
+                        (document.querySelector('.basket-items__slider-count') as HTMLElement).innerText =
+                            pageNumber.toString();
+                    }
+                    basket.putDataToBasketTotal();
+                    basket.putDataToHeader();
+                    new Basket().drawItems();
+                }
+                if ((e.target as HTMLElement).dataset.operator === 'quantity') {
+                    basket.putDataToBasketTotal();
+                    basket.putDataToHeader();
+                    new Basket().drawItems();
+                }
+                basket.putDataToBasketTotal();
+                basket.putDataToHeader();
+                new Basket().drawItems();
+                const getCurrentPaginationValues = new Basket().getPaginationValues();
+                new Basket().putPaginationValues(getCurrentPaginationValues[0], getCurrentPaginationValues[1]);
+            }
             //basket navigate to product
             if (target.closest('.basket-items__item')) {
                 if ((e.target as HTMLElement).dataset.operator === 'plus') {
-                    e.stopImmediatePropagation();
+                    e.preventDefault();
                     basket.increaseItemQnt((e.target as HTMLElement).dataset.id as string);
                     basket.putDataToBasketTotal();
                     basket.putDataToHeader();
                     new Basket().drawItems();
                 } else if ((e.target as HTMLElement).dataset.operator === 'minus') {
-                    e.stopImmediatePropagation();
+                    e.preventDefault();
                     basket.decreaseItemQnt((e.target as HTMLElement).dataset.id as string);
                     basket.putDataToBasketTotal();
                     basket.putDataToHeader();
                     new Basket().drawItems();
                 } else if ((e.target as HTMLElement).dataset.operator === 'delete') {
-                    e.stopImmediatePropagation();
+                    e.preventDefault();
                     basket.removeItemFromBasket((e.target as HTMLElement).dataset.id as string);
+                    new Basket().restorePaginationValues();
                     if (basket.getAllItemsInBasket().length === 0) {
                         router.options.appDOM.innerHTML = basketTemplate;
                         basket.putDataToHeader();
@@ -180,14 +227,14 @@ class AppView {
                         basket.putDataToBasketTotal();
                         basket.putDataToHeader();
                     }
-                }else {
+                } else {
                     e.preventDefault();
                     router.navigate(`products/${target.dataset.id}`, `Secret Shop - Товар`);
                     const id = Number(target.dataset.id);
                     this.product.render(id);
                 }
             }
-
+            //main page add to basket
             if (
                 (e.target as HTMLElement).className === 'card__buy' ||
                 (e.target as HTMLElement).className === 'card__buy card__buy--in-basket'
@@ -264,6 +311,7 @@ class AppView {
 
             if (target.closest('.goods-filter__reset')) {
                 localStorage.setItem('basketArray', '');
+                basket.putDataToHeader();
                 this.qString.resetQueryString();
                 router.navigate('home', 'Secret Shop - Главная');
                 localStorage.setItem('lastPath', 'home');

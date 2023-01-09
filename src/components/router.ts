@@ -4,6 +4,7 @@ import { errorPageTemplate } from '../templates/error-page';
 import { modalWindowTemplate } from '../templates/modal-window';
 import { productTemplate } from '../templates/product-info';
 import { Cards } from './appView';
+import { Basket, BasketMemory } from './basketLogic';
 
 type IRouter = {
     path: string | RegExp;
@@ -93,6 +94,10 @@ const router = new Router({
 router
     .add('basket', () => {
         router.options.appDOM.innerHTML = basketTemplate;
+        new BasketMemory().putDataToBasketTotal();
+        new BasketMemory().putDataToHeader();
+        new Basket().restorePaginationValues();
+        new Basket().drawItems();
     })
     .add('form', () => {
         router.options.appDOM.innerHTML = modalWindowTemplate;
