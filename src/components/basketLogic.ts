@@ -75,13 +75,14 @@ class Basket {
       this.qString.setQueryParams('currentPage', `${page}`);
     }
     restorePaginationValues(){
-      this.qString.setQueryParams('hero', 'Lina');
-      const itemQnt = document.querySelector('.basket-items__per-page-num') as HTMLInputElement;
-      const currentPage = document.querySelector('.basket-items__slider-count') as HTMLElement;
-        if (this.qString.getQueryObject().limit[0] != undefined){
-          itemQnt.value = this.qString.getQueryObject().limit[0].toString();
-          currentPage.innerText = this.qString.getQueryObject().currentPage[0].toString();
-        }
+        this.qString.delQueryKey('hero');
+        this.qString.setQueryParams('hero', 'Lina');
+        const itemQnt = document.querySelector('.basket-items__per-page-num') as HTMLInputElement;
+        const currentPage = document.querySelector('.basket-items__slider-count') as HTMLElement;
+            if (this.qString.getQueryObject().limit[0] != undefined){
+            itemQnt.value = this.qString.getQueryObject().limit[0].toString();
+            currentPage.innerText = this.qString.getQueryObject().currentPage[0].toString();
+            }
     }
     getPaginationValues() {
         const length = new BasketMemory().getAllItemsInBasket().length;

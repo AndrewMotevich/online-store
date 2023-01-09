@@ -4,7 +4,7 @@ import { QString } from './qString';
 import { Basket, BasketMemory } from './basketLogic';
 import { Product } from "./product";
 import { Controller } from './controller';
-import { ICard } from './types';
+import { ICard, basketItem } from './types';
 import { basketTemplate } from '../templates/basket';
 import { Modal } from './modal';
 
@@ -114,6 +114,11 @@ class AppView {
     init() {
         document.addEventListener('DOMContentLoaded', () => {
             this.qString.resetQueryString();
+            if (!localStorage.getItem('basketArray')) {
+                const arr:basketItem[] = [];
+                const stringify = JSON.stringify(arr);
+                localStorage.setItem('basketArray', stringify);
+            }
             new BasketMemory().putDataToHeader();
             router.navigate(`${localStorage.getItem('lastPath') ?? 'home'}`, 'Secret Shop - Главная');
             router.init();
