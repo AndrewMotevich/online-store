@@ -28,7 +28,7 @@ const productTemplate = `<div class="goods-details_wrapper container">
   <div class="info-field_description">
     <h3>Dark Behemoth</h3>
     <span class="label label_price">1999 руб.</span>
-    <button class="label description_modal-button">Купить в один клик</button>
+    <button class="label description_modal-button buy-one-click">Купить в один клик</button>
     <div class="description_labels">
       <div class="label label_hero">
         <img class="label_hero-icon"
