@@ -178,9 +178,7 @@ a:focus-visible {
         width: 100%;
         border-radius: 9px;
         &-wrap{
-            display: flex;
             width: 800px;
-            justify-content: space-between;
             position: relative;
             z-index: 101;
         }

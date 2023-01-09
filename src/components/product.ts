@@ -99,7 +99,7 @@ class Product{
             <div class="info-field_description">
             <h3>${productObj['item-name']}</h3>
             <span class="label label_price">${productObj.price} руб.</span>
-            <button class="label description_modal-button">Купить в один клик</button>
+            <button class="label description_modal-button buy-one-click" data-id="${productObj.id}">Купить в один клик</button>
             <div class="description_labels">
                 <div class="label label_hero">
                 <img class="label_hero-icon"

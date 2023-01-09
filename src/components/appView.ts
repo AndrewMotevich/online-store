@@ -6,6 +6,7 @@ import { Product } from "./product";
 import { Controller } from './controller';
 import { ICard } from './types';
 import { basketTemplate } from '../templates/basket';
+import { Modal } from './modal';
 
 
 class Cards {
@@ -77,11 +78,13 @@ class AppView {
     product;
     basketMemory;
     controller;
+    modal;
     constructor() {
         this.qString = new QString();
         this.product = new Product();
         this.basketMemory = new BasketMemory();
         this.controller = new Controller();
+        this.modal = new Modal();
     }
 
     filterChecker() {
@@ -152,8 +155,9 @@ class AppView {
                 new Basket().drawItems();
             }
         });
-
-        router.options.appDOM.addEventListener('click', (e) => {
+        
+        const bodyDOM = document.querySelector('body') as HTMLElement;
+        bodyDOM.addEventListener('click', (e) => {
             const target = e.target as HTMLElement;
             const basket = new BasketMemory();
             //basket pagination
@@ -414,9 +418,47 @@ class AppView {
                     document.querySelector('.info-field__video-video')?.remove();
                 }
             }
+
+            if (target.closest('.basket-pay__btn')) {
+                this.modal.render();
+            }
+
+            if (target.closest('.modal-overlay')) {
+                this.modal.close();
+            }
+
+            if (target.closest('.modal-window__close')) {
+                this.modal.close();
+            }
+
+            if (target.closest('.form-button')) {
+                this.modal.submit();
+            }
+
+            if (target.closest('.buy-one-click')) {
+                let isInBasket = false;
+                const targetID = target.dataset.id as string;
+                this.basketMemory.getAllItemsInBasket().forEach((item) => {
+                    if (item.id === Number(targetID)) {
+                        isInBasket = true;
+                        return;
+                    }
+                });
+
+                if (isInBasket) {
+                    router.navigate('basket', 'Secret Shop - Корзина');
+                    new Basket().drawItems();
+                    this.modal.render();
+                } else {
+                    new BasketMemory().addItemToBasket(targetID);
+                    router.navigate('basket', 'Secret Shop - Корзина');
+                    new Basket().drawItems();
+                    this.modal.render();
+                }
+            }
         });
 
-        router.options.appDOM.addEventListener('keyup', (e) => {
+        bodyDOM.addEventListener('keyup', (e) => {
             e.preventDefault();
             const target = e.target as HTMLInputElement;
             if (target.closest('.goods-cards__head-search')) {
@@ -426,6 +468,54 @@ class AppView {
                     this.qString.delQueryKey('search');
                 }
                 new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
+            }
+
+            if (target.closest('.modal-window_forms')) {
+                this.modal.validate();
+            }
+
+            if (target.closest('#card-number')) {
+                const img = document.querySelector('.card-number-icon') as HTMLImageElement;
+                if (target.value.startsWith('4')) {
+                    img.src = 'https://cdn.visa.com/v2/assets/images/logos/visa/blue/logo.png';
+                } else if (target.value.startsWith('5')) {
+                    img.src = 'https://www.mastercard.hu/content/dam/public/mastercardcom/eu/hu/images/mc-logo-52.svg';
+                } else if (target.value.startsWith('2')) {
+                    img.src = 'http://evgenykatyshev.ru/projects/mir-logo/mir-logo.svg';
+                } else {
+                    img.src = 'https://i.guim.co.uk/img/media/b73cc57cb1d46ae742efd06b6c58805e8600d482/16_0_2443_1466/master/2443.jpg?width=700&quality=85&auto=format&fit=max&s=fb1dca6cdd4589cd9ef2fc941935de71';
+                }
+            }
+
+            if (target.closest('#card-month')) {
+                target.value = target.value.replace(/[^\d]/g, '');
+                const yearInput = document.querySelector('#card-year') as HTMLInputElement;
+                if (target.value.length === 2) {
+                    yearInput.focus();
+                }
+            }
+
+            if (target.closest('#card-year')) {
+                target.value = target.value.replace(/[^\d]/g, '');
+                const cvvInput = document.querySelector('#cvv') as HTMLInputElement;
+                if (target.value.length === 2) {
+                    cvvInput.focus();
+                }
+            }
+
+            if (target.closest('#cvv')) {
+                target.value = target.value.replace(/[^\d]/g, '');
+            }
+
+            if (target.closest('#card-number')) {
+                let value = target.value.replace(/[^\d]/g, '').substring(0,16);
+                let arr;
+                if (value !== ''){
+                    arr = value.match(/.{1,4}/g) as RegExpMatchArray;
+                    value = arr.join(' ');
+                }
+
+                target.value = value;
             }
         });
     }

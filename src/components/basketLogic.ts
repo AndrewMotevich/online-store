@@ -136,6 +136,11 @@ class BasketMemory {
         this.resolveOrder();
         this.resolvePages(Number(itemQnt.value));
     }
+    removeAllItems() {
+      this.basketArray = [];
+      const stringify = JSON.stringify(this.basketArray);
+      localStorage.setItem('basketArray', stringify);
+    }
     increaseItemQnt(id: string) {
         const data = this.getAllItemsInBasket();
         data.forEach((elem) => {
