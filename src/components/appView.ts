@@ -121,7 +121,7 @@ class AppView {
             }
             new BasketMemory().putDataToHeader();
             router.navigate(`${localStorage.getItem('lastPath') ?? 'home'}`, 'Secret Shop - Главная');
-            router.init();
+            router.init();   
             this.filterChecker();
             this.typeView();
 
@@ -371,6 +371,7 @@ class AppView {
                 }
                 target.classList.toggle('description_button--add');
                 target.classList.toggle('description_button--not-add');
+                new BasketMemory().putDataToHeader();
             }
 
             if (target.closest('.info-field_img-img')) {

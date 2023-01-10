@@ -135,7 +135,9 @@ class BasketMemory {
         const stringify = JSON.stringify(this.basketArray);
         localStorage.setItem('basketArray', stringify);
         this.resolveOrder();
-        this.resolvePages(Number(itemQnt.value));
+        if (localStorage.getItem('lastURLStart')?.includes('basket')) {
+            this.resolvePages(Number(itemQnt.value));
+        }
     }
     removeAllItems() {
       this.basketArray = [];
