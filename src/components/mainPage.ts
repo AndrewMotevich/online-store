@@ -36,8 +36,8 @@ class MainPage {
                 allCards.forEach((obj)=>set.add(obj));
                 return 0;
             }
-            const max = queryParameters['price-range'][1];
-            const min = queryParameters['price-range'][0];
+            const max = +queryParameters['price-range'][1];
+            const min = +queryParameters['price-range'][0];
             allCards.forEach((obj) => {
                 if (
                     obj.price >= min &&
@@ -51,8 +51,10 @@ class MainPage {
         function stockFilter(){
             if (queryParameters['stock-range'].length === 0) return 0;
             const tempSet = new Set();
-            const max = queryParameters['stock-range'][1];
-            const min = queryParameters['stock-range'][0];
+            const max = +queryParameters['stock-range'][1];
+            const min = +queryParameters['stock-range'][0];
+            console.log(max, min);
+            
             allCards.forEach((obj) => {
                 if (
                     obj.stock >= min &&
