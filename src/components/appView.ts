@@ -2,13 +2,13 @@ import MainPage from './mainPage';
 import router from './router';
 import { QString } from './qString';
 import { Basket, BasketMemory } from './basketLogic';
-import { Product } from "./product";
+import { Product } from './product';
 import { Controller } from './controller';
 import { ICard, basketItem } from './types';
 import { basketTemplate } from '../templates/basket';
 import { Modal } from './modal';
 import { DualSlider } from './dualSlider';
-
+import { checkPromo } from './promoBlock';
 
 class Cards {
     mainPage;
@@ -162,13 +162,13 @@ class AppView {
         document.addEventListener('DOMContentLoaded', () => {
             this.qString.resetQueryString();
             if (!localStorage.getItem('basketArray')) {
-                const arr:basketItem[] = [];
+                const arr: basketItem[] = [];
                 const stringify = JSON.stringify(arr);
                 localStorage.setItem('basketArray', stringify);
             }
             new BasketMemory().putDataToHeader();
             router.navigate(`${localStorage.getItem('lastPath') ?? 'home'}`, 'Secret Shop - Главная');
-            router.init();   
+            router.init();
             this.filterChecker();
             this.typeView();
 
@@ -206,9 +206,14 @@ class AppView {
                 basket.putDataToBasketTotal();
                 new Basket().restorePaginationValues();
                 new Basket().drawItems();
+                (document.querySelector('.basket-pay__promo-code') as HTMLInputElement).addEventListener('keyup', () => {
+                    const promoBlock = document.querySelector('.basket-pay__promo-code') as HTMLInputElement;
+                    checkPromo(promoBlock.value);
+                });
             }
         });
-        
+
+
         const bodyDOM = document.querySelector('body') as HTMLElement;
         bodyDOM.addEventListener('click', (e) => {
             const target = e.target as HTMLElement;
@@ -219,7 +224,9 @@ class AppView {
                     if (
                         (document.querySelector('.basket-items__slider-count') as HTMLElement).innerText >= '1' &&
                         (document.querySelector('.basket-items__slider-count') as HTMLElement).innerText <
-                            Math.ceil(new Basket().getPaginationValues()[2] / new Basket().getPaginationValues()[0]).toString()
+                            Math.ceil(
+                                new Basket().getPaginationValues()[2] / new Basket().getPaginationValues()[0]
+                            ).toString()
                     ) {
                         const pageNumber =
                             Number((document.querySelector('.basket-items__slider-count') as HTMLElement).innerText) +
@@ -379,12 +386,12 @@ class AppView {
                 const searchBar = document.querySelector('.goods-cards__head-search') as HTMLInputElement;
                 searchBar.value = '';
 
-                const priceRangeMin  = document.querySelector('#priceRangeMin') as HTMLInputElement;
+                const priceRangeMin = document.querySelector('#priceRangeMin') as HTMLInputElement;
                 const priceRangeMax = document.querySelector('#priceRangeMax') as HTMLInputElement;
                 const priceNumMin = document.querySelector('#priceNumMin') as HTMLInputElement;
                 const priceNumMax = document.querySelector('#priceNumMax') as HTMLInputElement;
-    
-                const stockRangeMin  = document.querySelector('#stockRangeMin') as HTMLInputElement;
+
+                const stockRangeMin = document.querySelector('#stockRangeMin') as HTMLInputElement;
                 const stockRangeMax = document.querySelector('#stockRangeMax') as HTMLInputElement;
                 const stockNumMin = document.querySelector('#stockNumMin') as HTMLInputElement;
                 const stockNumMax = document.querySelector('#stockNumMax') as HTMLInputElement;
@@ -393,7 +400,7 @@ class AppView {
                 priceRangeMax.value = '10000';
                 priceNumMin.value = '0';
                 priceNumMax.value = '10000';
-                
+
                 stockRangeMin.value = '0';
                 stockRangeMax.value = '10000';
                 stockNumMin.value = '0';
@@ -557,7 +564,8 @@ class AppView {
                 } else if (target.value.startsWith('2')) {
                     img.src = 'http://evgenykatyshev.ru/projects/mir-logo/mir-logo.svg';
                 } else {
-                    img.src = 'https://i.guim.co.uk/img/media/b73cc57cb1d46ae742efd06b6c58805e8600d482/16_0_2443_1466/master/2443.jpg?width=700&quality=85&auto=format&fit=max&s=fb1dca6cdd4589cd9ef2fc941935de71';
+                    img.src =
+                        'https://i.guim.co.uk/img/media/b73cc57cb1d46ae742efd06b6c58805e8600d482/16_0_2443_1466/master/2443.jpg?width=700&quality=85&auto=format&fit=max&s=fb1dca6cdd4589cd9ef2fc941935de71';
                 }
             }
 
@@ -582,9 +590,9 @@ class AppView {
             }
 
             if (target.closest('#card-number')) {
-                let value = target.value.replace(/[^\d]/g, '').substring(0,16);
+                let value = target.value.replace(/[^\d]/g, '').substring(0, 16);
                 let arr;
-                if (value !== ''){
+                if (value !== '') {
                     arr = value.match(/.{1,4}/g) as RegExpMatchArray;
                     value = arr.join(' ');
                 }
@@ -595,12 +603,12 @@ class AppView {
 
         bodyDOM.addEventListener('input', (e) => {
             const target = e.target as HTMLInputElement;
-            const priceRangeMin  = document.querySelector('#priceRangeMin') as HTMLInputElement;
+            const priceRangeMin = document.querySelector('#priceRangeMin') as HTMLInputElement;
             const priceRangeMax = document.querySelector('#priceRangeMax') as HTMLInputElement;
             const priceNumMin = document.querySelector('#priceNumMin') as HTMLInputElement;
             const priceNumMax = document.querySelector('#priceNumMax') as HTMLInputElement;
 
-            const stockRangeMin  = document.querySelector('#stockRangeMin') as HTMLInputElement;
+            const stockRangeMin = document.querySelector('#stockRangeMin') as HTMLInputElement;
             const stockRangeMax = document.querySelector('#stockRangeMax') as HTMLInputElement;
             const stockNumMin = document.querySelector('#stockNumMin') as HTMLInputElement;
             const stockNumMax = document.querySelector('#stockNumMax') as HTMLInputElement;
@@ -622,14 +630,14 @@ class AppView {
                 this.dualSliderPrice.controlMinInput(priceRangeMin, priceNumMin, priceNumMax, priceRangeMax);
                 new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
             }
-        
+
             if (target.closest('#priceNumMax')) {
                 this.dualSliderPrice.init(priceRangeMin, priceRangeMax);
                 this.dualSliderPrice.controlMaxInput(priceRangeMax, priceNumMin, priceNumMax, priceRangeMax);
                 new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
             }
 
-            // 
+            //
 
             if (target.closest('#stockRangeMin')) {
                 this.dualSliderStock.init(stockRangeMin, stockRangeMax);
@@ -648,7 +656,7 @@ class AppView {
                 this.dualSliderStock.controlMinInput(stockRangeMin, stockNumMin, stockNumMax, stockRangeMax);
                 new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
             }
-        
+
             if (target.closest('#stockNumMax')) {
                 this.dualSliderStock.init(stockRangeMin, stockRangeMax);
                 this.dualSliderStock.controlMaxInput(stockRangeMax, stockNumMin, stockNumMax, stockRangeMax);

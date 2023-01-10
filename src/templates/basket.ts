@@ -31,13 +31,14 @@ const basketTemplate = `
         <div class="basket-pay__price">
           <span class="basket-pay__price-text">Сумма</span>
           <span class="basket-pay__price-num">0 руб.</span>
-        </div>
-        <div class="basket-pay__amount">
-          <span class="basket-pay__amount-text">Кол-во</span>
+          </div>
+          <div class="basket-pay__amount">
+          <span class="basket-pay__amount-text">Кол-в</span>
           <span class="basket-pay__amount-num">0</span>
-        </div>
-        <input type="text" class="basket-pay__promo-code" placeholder="Enter secret code">
-        <button class="basket-pay__btn">Купить</button>
+          </div>
+          <input type="text" class="basket-pay__promo-code" placeholder="Enter secret code">
+          <div style=" grid-row: 6;font-size: 12px; color: red; padding: 0px;">Тест: Roshan, Dota2</div>
+          <button class="basket-pay__btn">Купить</button>
       </div>
     </div>
   </section>
