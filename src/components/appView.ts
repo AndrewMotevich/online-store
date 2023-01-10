@@ -7,6 +7,7 @@ import { Controller } from './controller';
 import { ICard, basketItem } from './types';
 import { basketTemplate } from '../templates/basket';
 import { Modal } from './modal';
+import { DualSlider } from './dualSlider';
 
 
 class Cards {
@@ -79,20 +80,66 @@ class AppView {
     basketMemory;
     controller;
     modal;
+    dualSliderPrice;
+    dualSliderStock;
     constructor() {
         this.qString = new QString();
         this.product = new Product();
         this.basketMemory = new BasketMemory();
         this.controller = new Controller();
         this.modal = new Modal();
+        this.dualSliderPrice = new DualSlider('price-range');
+        this.dualSliderStock = new DualSlider('stock-range');
     }
 
     filterChecker() {
         const obj = this.qString.hasQuery() ? this.qString.getQueryObject() : this.qString.result;
         Object.entries(obj).forEach((item) => {
-            item[1].forEach((value) => {
+            item[1].forEach((value, indexArr) => {
                 const input = document.querySelector(`input[value="${value}"]`) as HTMLInputElement;
-                input.checked = true;
+                try {
+                    input.checked = true;
+                } catch (e) {
+                    console.log(e);
+                }
+
+                if (item[0] === 'price-range') {
+                    console.log(value, indexArr);
+                    if (indexArr === 0) {
+                        const rangeMin = document.querySelector('#priceRangeMin') as HTMLInputElement;
+                        const numberMin = document.querySelector('#priceNumMin') as HTMLInputElement;
+
+                        rangeMin.value = `${value}`;
+                        numberMin.value = `${value}`;
+                    }
+
+                    if (indexArr === 1) {
+                        const rangeMax = document.querySelector('#priceRangeMax') as HTMLInputElement;
+                        const numberMax = document.querySelector('#priceNumMax') as HTMLInputElement;
+
+                        rangeMax.value = `${value}`;
+                        numberMax.value = `${value}`;
+                    }
+                }
+
+                if (item[0] === 'stock-range') {
+                    console.log(value, indexArr);
+                    if (indexArr === 0) {
+                        const rangeMin = document.querySelector('#stockRangeMin') as HTMLInputElement;
+                        const numberMin = document.querySelector('#stockNumMin') as HTMLInputElement;
+
+                        rangeMin.value = `${value}`;
+                        numberMin.value = `${value}`;
+                    }
+
+                    if (indexArr === 1) {
+                        const rangeMax = document.querySelector('#stockRangeMax') as HTMLInputElement;
+                        const numberMax = document.querySelector('#stockNumMax') as HTMLInputElement;
+
+                        rangeMax.value = `${value}`;
+                        numberMax.value = `${value}`;
+                    }
+                }
             });
         });
     }
@@ -144,6 +191,7 @@ class AppView {
             router.navigate('home', 'Secret Shop - Главная');
             localStorage.setItem('lastPath', 'home');
             new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
+            this.filterChecker();
             this.typeView();
         });
 
@@ -330,6 +378,26 @@ class AppView {
 
                 const searchBar = document.querySelector('.goods-cards__head-search') as HTMLInputElement;
                 searchBar.value = '';
+
+                const priceRangeMin  = document.querySelector('#priceRangeMin') as HTMLInputElement;
+                const priceRangeMax = document.querySelector('#priceRangeMax') as HTMLInputElement;
+                const priceNumMin = document.querySelector('#priceNumMin') as HTMLInputElement;
+                const priceNumMax = document.querySelector('#priceNumMax') as HTMLInputElement;
+    
+                const stockRangeMin  = document.querySelector('#stockRangeMin') as HTMLInputElement;
+                const stockRangeMax = document.querySelector('#stockRangeMax') as HTMLInputElement;
+                const stockNumMin = document.querySelector('#stockNumMin') as HTMLInputElement;
+                const stockNumMax = document.querySelector('#stockNumMax') as HTMLInputElement;
+
+                priceRangeMin.value = '0';
+                priceRangeMax.value = '10000';
+                priceNumMin.value = '0';
+                priceNumMax.value = '10000';
+                
+                stockRangeMin.value = '0';
+                stockRangeMax.value = '10000';
+                stockNumMin.value = '0';
+                stockNumMax.value = '10000';
             }
 
             if (target.closest('.goods-filter__copy')) {
@@ -522,6 +590,69 @@ class AppView {
                 }
 
                 target.value = value;
+            }
+        });
+
+        bodyDOM.addEventListener('input', (e) => {
+            const target = e.target as HTMLInputElement;
+            const priceRangeMin  = document.querySelector('#priceRangeMin') as HTMLInputElement;
+            const priceRangeMax = document.querySelector('#priceRangeMax') as HTMLInputElement;
+            const priceNumMin = document.querySelector('#priceNumMin') as HTMLInputElement;
+            const priceNumMax = document.querySelector('#priceNumMax') as HTMLInputElement;
+
+            const stockRangeMin  = document.querySelector('#stockRangeMin') as HTMLInputElement;
+            const stockRangeMax = document.querySelector('#stockRangeMax') as HTMLInputElement;
+            const stockNumMin = document.querySelector('#stockNumMin') as HTMLInputElement;
+            const stockNumMax = document.querySelector('#stockNumMax') as HTMLInputElement;
+
+            if (target.closest('#priceRangeMin')) {
+                this.dualSliderPrice.init(priceRangeMin, priceRangeMax);
+                this.dualSliderPrice.controlMinRange(priceRangeMin, priceRangeMax, priceNumMin, priceNumMax);
+                new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
+            }
+
+            if (target.closest('#priceRangeMax')) {
+                this.dualSliderPrice.init(priceRangeMin, priceRangeMax);
+                this.dualSliderPrice.controlMaxRange(priceRangeMin, priceRangeMax, priceNumMax, priceNumMin);
+                new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
+            }
+
+            if (target.closest('#priceNumMin')) {
+                this.dualSliderPrice.init(priceRangeMin, priceRangeMax);
+                this.dualSliderPrice.controlMinInput(priceRangeMin, priceNumMin, priceNumMax, priceRangeMax);
+                new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
+            }
+        
+            if (target.closest('#priceNumMax')) {
+                this.dualSliderPrice.init(priceRangeMin, priceRangeMax);
+                this.dualSliderPrice.controlMaxInput(priceRangeMax, priceNumMin, priceNumMax, priceRangeMax);
+                new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
+            }
+
+            // 
+
+            if (target.closest('#stockRangeMin')) {
+                this.dualSliderStock.init(stockRangeMin, stockRangeMax);
+                this.dualSliderStock.controlMinRange(stockRangeMin, stockRangeMax, stockNumMin, stockNumMax);
+                new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
+            }
+
+            if (target.closest('#stockRangeMax')) {
+                this.dualSliderStock.init(stockRangeMin, stockRangeMax);
+                this.dualSliderStock.controlMaxRange(stockRangeMin, stockRangeMax, stockNumMax, stockNumMin);
+                new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
+            }
+
+            if (target.closest('#stockNumMin')) {
+                this.dualSliderStock.init(stockRangeMin, stockRangeMax);
+                this.dualSliderStock.controlMinInput(stockRangeMin, stockNumMin, stockNumMax, stockRangeMax);
+                new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
+            }
+        
+            if (target.closest('#stockNumMax')) {
+                this.dualSliderStock.init(stockRangeMin, stockRangeMax);
+                this.dualSliderStock.controlMaxInput(stockRangeMax, stockNumMin, stockNumMax, stockRangeMax);
+                new Cards(document.querySelector('.goods-cards__list') as HTMLElement).render();
             }
         });
     }

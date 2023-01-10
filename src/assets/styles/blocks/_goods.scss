@@ -437,3 +437,77 @@
         line-height: 16px;
     }
 }
+
+.range{
+    &-wrap{
+        display: flex;
+        flex-direction: column;
+        row-gap: 25px;
+    }
+    &__control{
+        &-wrap{
+            position: relative;
+        }
+        &-input{
+            appearance: none;
+            height: 2px;
+            width: 100%;
+            position: absolute;
+            background-color: var(--color-white);
+            pointer-events: none;
+            &:first-child{
+                height: 0;
+                z-index: 1;
+            }
+            &::-webkit-slider-thumb{
+                -webkit-appearance: none;
+                pointer-events: all;
+                width: 16px;
+                height: 16px;
+                background-color: var(--color-accent);
+                border-radius: 50%;
+                cursor: pointer; 
+                border: none; 
+            }
+            &::-moz-range-thumb{
+                -webkit-appearance: none;
+                pointer-events: all;
+                width: 16px;
+                height: 16px;
+                background-color: var(--color-accent);
+                border-radius: 50%;
+                cursor: pointer; 
+                border: none; 
+            }
+        }
+    }
+    &__num{
+        &-wrap{
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            font-size: 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+        }
+        &-input{
+            color: var(--color-white);
+            font-size: 18px;
+            border: 1px solid var(--color-secondary);
+            border-radius: 5px;
+            background: transparent;
+            -moz-appearance: textfield;
+            width: 100%;
+            height: 30px;
+            &:nth-child(2){
+                text-align: right;
+            }
+        }
+    }
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
