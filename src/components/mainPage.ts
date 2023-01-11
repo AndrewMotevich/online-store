@@ -123,8 +123,24 @@ class MainPage {
                 const elem = element as ICard;
                 const elemValues = Object.values(elem);
                 elemValues.forEach((value) => {
-                    if (value === searchParametr.replace(/\+/g, ' ')){
-                        tempSet.add(elem);
+                    if (typeof value === 'string') {
+                        if (value === elemValues[9] || value === elemValues[10] || value === elemValues[11] || value === elemValues[12]) {
+                            return;
+                        }
+                        
+                        if (value.toLowerCase().includes(searchParametr.replace(/\+/g, ' '))) {
+                            tempSet.add(elem);
+                        }
+                    }
+
+                    if (typeof value === 'number') {
+                        if (value === elemValues[0]) {
+                            return;
+                        }
+                        
+                        if (String(value).includes(searchParametr.replace(/\+/g, ' '))) {
+                            tempSet.add(elem);
+                        }
                     }
                 });
             });
