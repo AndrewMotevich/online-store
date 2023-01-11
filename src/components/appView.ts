@@ -215,6 +215,19 @@ class AppView {
 
 
         const bodyDOM = document.querySelector('body') as HTMLElement;
+
+        bodyDOM.addEventListener('keyup', (e)=>{
+            const basket = new BasketMemory();
+            if ((e.target as HTMLElement).dataset.operator === 'quantity') {
+                basket.putDataToBasketTotal();
+                basket.putDataToHeader();
+                new Basket().drawItems();
+                basket.putDataToBasketTotal();
+                basket.putDataToHeader();
+                new Basket().drawItems();
+            }
+        });
+
         bodyDOM.addEventListener('click', (e) => {
             const target = e.target as HTMLElement;
             const basket = new BasketMemory();
@@ -250,11 +263,11 @@ class AppView {
                     basket.putDataToHeader();
                     new Basket().drawItems();
                 }
-                if ((e.target as HTMLElement).dataset.operator === 'quantity') {
-                    basket.putDataToBasketTotal();
-                    basket.putDataToHeader();
-                    new Basket().drawItems();
-                }
+                // if ((e.target as HTMLElement).dataset.operator === 'quantity') {
+                //     basket.putDataToBasketTotal();
+                //     basket.putDataToHeader();
+                //     new Basket().drawItems();
+                // }
                 basket.putDataToBasketTotal();
                 basket.putDataToHeader();
                 new Basket().drawItems();
