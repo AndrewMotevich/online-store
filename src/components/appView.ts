@@ -206,17 +206,19 @@ class AppView {
                 basket.putDataToBasketTotal();
                 new Basket().restorePaginationValues();
                 new Basket().drawItems();
-                (document.querySelector('.basket-pay__promo-code') as HTMLInputElement).addEventListener('keyup', () => {
-                    const promoBlock = document.querySelector('.basket-pay__promo-code') as HTMLInputElement;
-                    checkPromo(promoBlock.value);
-                });
+                (document.querySelector('.basket-pay__promo-code') as HTMLInputElement).addEventListener(
+                    'keyup',
+                    () => {
+                        const promoBlock = document.querySelector('.basket-pay__promo-code') as HTMLInputElement;
+                        checkPromo(promoBlock.value);
+                    }
+                );
             }
         });
 
-
         const bodyDOM = document.querySelector('body') as HTMLElement;
 
-        bodyDOM.addEventListener('keyup', (e)=>{
+        bodyDOM.addEventListener('keyup', (e) => {
             const basket = new BasketMemory();
             if ((e.target as HTMLElement).dataset.operator === 'quantity') {
                 basket.putDataToBasketTotal();
@@ -295,10 +297,21 @@ class AppView {
                     if (basket.getAllItemsInBasket().length === 0) {
                         router.options.appDOM.innerHTML = basketTemplate;
                         basket.putDataToHeader();
-                    } else {
-                        new Basket().drawItems();
+                    } else if ((document.querySelectorAll('.basket-items__item') as NodeList).length === 1) {
+                        const pageNumber =
+                            Number((document.querySelector('.basket-items__slider-count') as HTMLElement).innerText) -
+                            1;
+                        (document.querySelector('.basket-items__slider-count') as HTMLElement).innerText =
+                            pageNumber.toString();
                         basket.putDataToBasketTotal();
                         basket.putDataToHeader();
+                        new Basket().drawItems();
+                        const getCurrentPaginationValues = new Basket().getPaginationValues();
+                        new Basket().putPaginationValues(getCurrentPaginationValues[0], getCurrentPaginationValues[1]);
+                    } else {
+                        basket.putDataToBasketTotal();
+                        basket.putDataToHeader();
+                        new Basket().drawItems();
                     }
                 } else {
                     e.preventDefault();
