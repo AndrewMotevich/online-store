@@ -195,20 +195,22 @@ class Modal{
             arrBool[4] = true;
         }
 
-        if (!this.checkCardMonth()) {
-            dateInput?.classList.add('form-input--wrong');
-            arrBool[5] = false;
-        } else {
-            dateInput?.classList.remove('form-input--wrong');
-            arrBool[5] = true;
-        }
-
         if (!this.checkCardYear()) {
             dateInput?.classList.add('form-input--wrong');
             arrBool[6] = false;
         } else {
             dateInput?.classList.remove('form-input--wrong');
             arrBool[6] = true;
+        }
+
+        if (!this.checkCardMonth()) {
+            dateInput?.classList.add('form-input--wrong');
+            console.log('test');
+            
+            arrBool[5] = false;
+        } else {
+            dateInput?.classList.remove('form-input--wrong');
+            arrBool[5] = true;
         }
 
         if (!this.checkCardCVV()) {
