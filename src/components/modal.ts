@@ -28,9 +28,8 @@ class Modal{
         this.modalDOM.innerHTML = '';
     }
 
-    checkName() {
-        const nameInput = document.querySelector('#name') as HTMLInputElement;
-        const nameArr = nameInput.value.replace(/\s{2,}/g, ' ').trim().split(' ');
+    checkName(value: string) {  
+        const nameArr = value.replace(/\s{2,}/g, ' ').trim().split(' ');
         let bool = false;
         
         if (nameArr.length >= 2) {
@@ -42,9 +41,8 @@ class Modal{
         return bool;
     }
 
-    checkPhone() {
-        const phoneInput = document.querySelector('#phone') as HTMLInputElement;
-        let phoneValue = phoneInput.value;
+    checkPhone(value: string) {
+        let phoneValue = value;
 
         if (phoneValue[0] !== '+') {
             return false;
@@ -59,11 +57,11 @@ class Modal{
         if (phoneValue.length >= 9) {
             return true;
         }
+        return false;
     }
 
-    checkAddress() {
-        const addressInput = document.querySelector('#address') as HTMLInputElement;
-        const addressValue = addressInput.value.replace(/\s{2,}/g, ' ').trim().split(' ');
+    checkAddress(value: string) {
+        const addressValue = value.replace(/\s{2,}/g, ' ').trim().split(' ');
         let bool = false;
 
         if (addressValue.length >= 3) {
@@ -75,16 +73,14 @@ class Modal{
         return bool;
     }
 
-    checkEmail() {
-        const emailInput = document.querySelector('#email') as HTMLInputElement;
-        const emailValue = emailInput.value;
+    checkEmail(value: string) {
+        const emailValue = value;
 
         return /^(.+)@(.+)\.(.+)$/.test(emailValue);
     }
 
-    checkCardNumber() {
-        const cardNumber = document.querySelector('#card-number') as HTMLInputElement;
-        const cardNUmberValue = cardNumber.value.replace(/ /g, '');
+    checkCardNumber(value: string) {
+        const cardNUmberValue = value.replace(/ /g, '');
         let bool = false;
         
         if (cardNUmberValue.length >= 16) {
@@ -96,9 +92,8 @@ class Modal{
         return bool;
     }
 
-    checkCardMonth() {
-        const cardMonth = document.querySelector('#card-month') as HTMLInputElement;
-        const cardMonthValue = cardMonth.value;
+    checkCardMonth(value: string) {
+        const cardMonthValue = value;
         let bool = false;
         
         if (cardMonthValue.length >= 2) {
@@ -112,9 +107,8 @@ class Modal{
         return bool;
     }
 
-    checkCardYear() {
-        const cardYear = document.querySelector('#card-year') as HTMLInputElement;
-        const cardYearValue = cardYear.value;
+    checkCardYear(value: string) {
+        const cardYearValue = value;
         let bool = false;
         
         if (cardYearValue.length >= 2) {
@@ -128,9 +122,8 @@ class Modal{
         return bool;
     }
 
-    checkCardCVV() {
-        const cardCVV = document.querySelector('#cvv') as HTMLInputElement;
-        const cardCVVValue = cardCVV.value;
+    checkCardCVV(value: string) {
+        const cardCVVValue = value;
         let bool = false;
 
         if (cardCVVValue.length === 3) {
@@ -145,17 +138,19 @@ class Modal{
     }
 
     validate(){
-        const nameInput = document.querySelector('#name');
-        const phoneInput = document.querySelector('#phone');
-        const addressInput = document.querySelector('#address');
-        const emailInput = document.querySelector('#email');
+        const nameInput = document.querySelector('#name') as HTMLInputElement;
+        const phoneInput = document.querySelector('#phone') as HTMLInputElement;
+        const addressInput = document.querySelector('#address') as HTMLInputElement;
+        const emailInput = document.querySelector('#email') as HTMLInputElement;
 
-        const cardNumber = document.querySelector('#card-number');
+        const cardNumber = document.querySelector('#card-number') as HTMLInputElement;
         const dateInput = document.querySelector('.card_date');
-        const cardCVV = document.querySelector('#cvv');
+        const cardMonth = document.querySelector('#card-month') as HTMLInputElement;
+        const cardYear = document.querySelector('#card-year') as HTMLInputElement;
+        const cardCVV = document.querySelector('#cvv') as HTMLInputElement;
         const arrBool = [false, false, false, false, false, false, false, false];
 
-        if (!this.checkName()) {
+        if (!this.checkName(nameInput.value)) {
             nameInput?.classList.add('form-input--wrong');
             arrBool[0] = false;
         } else {
@@ -163,7 +158,7 @@ class Modal{
             arrBool[0] = true;
         }
 
-        if (!this.checkPhone()) {
+        if (!this.checkPhone(phoneInput.value)) {
             phoneInput?.classList.add('form-input--wrong');
             arrBool[1] = false;
         } else {
@@ -171,7 +166,7 @@ class Modal{
             arrBool[1] = true;
         }
 
-        if (!this.checkAddress()) {
+        if (!this.checkAddress(addressInput.value)) {
             addressInput?.classList.add('form-input--wrong');
             arrBool[2] = false;
         } else {
@@ -179,7 +174,7 @@ class Modal{
             arrBool[2] = true;
         }
 
-        if (!this.checkEmail()) {
+        if (!this.checkEmail(emailInput.value)) {
             emailInput?.classList.add('form-input--wrong');
             arrBool[3] = false;
         } else {
@@ -187,7 +182,7 @@ class Modal{
             arrBool[3] = true;
         }
 
-        if (!this.checkCardNumber()) {
+        if (!this.checkCardNumber(cardNumber.value)) {
             cardNumber?.classList.add('form-input--wrong');
             arrBool[4] = false;
         } else {
@@ -195,7 +190,7 @@ class Modal{
             arrBool[4] = true;
         }
 
-        if (!this.checkCardYear()) {
+        if (!this.checkCardYear(cardYear.value)) {
             dateInput?.classList.add('form-input--wrong');
             arrBool[6] = false;
         } else {
@@ -203,7 +198,7 @@ class Modal{
             arrBool[6] = true;
         }
 
-        if (!this.checkCardMonth()) {
+        if (!this.checkCardMonth(cardMonth.value)) {
             dateInput?.classList.add('form-input--wrong');
             console.log('test');
             
@@ -213,7 +208,7 @@ class Modal{
             arrBool[5] = true;
         }
 
-        if (!this.checkCardCVV()) {
+        if (!this.checkCardCVV(cardCVV.value)) {
             cardCVV?.classList.add('form-input--wrong');
             arrBool[7] = false;
         } else {
@@ -243,6 +238,7 @@ class Modal{
             modalWrap.innerHTML = '';
             this.basketMemory.removeAllItems();
             this.basket.drawItems();
+            this.basketMemory.putDataToHeader();
             router.navigate('home', 'Secret Shop - Главная');
         }, 3000);
     }
