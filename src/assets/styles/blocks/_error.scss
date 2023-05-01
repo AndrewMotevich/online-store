@@ -1,0 +1,14 @@
+.error{
+    width: 100%;
+    min-height: calc(100vh - 193.5px);
+    padding-top: 84px;
+    background: no-repeat center url(./assets/img/error-bg.jpg);
+    background-color: #07080e;
+    background-size: contain;
+    &__title{
+        font-weight: 700;
+        font-size: 50px;
+        line-height: 72px;
+        margin: 0px 0px 10px 0px;
+    }
+}
